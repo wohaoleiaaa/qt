@@ -155,7 +155,18 @@
             <widget class="QLineEdit" name="dbEditIDCard"/>
            </item>
            <item>
-            <widget class="QComboBox" name="dbComboSex"/>
+            <widget class="QComboBox" name="dbComboSex">
+             <item>
+              <property name="text">
+               <string>男</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>女</string>
+              </property>
+             </item>
+            </widget>
            </item>
            <item>
             <widget class="QDateEdit" name="dbDateEditDOB"/>

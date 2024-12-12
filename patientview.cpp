@@ -48,6 +48,7 @@ void PatientView::on_btDelete_clicked()
 
 void PatientView::on_btEdit_clicked()
 {
-
+    QModelIndex curIndex = IDatabase::getInstance().thePatientSelection->currentIndex();
+    emit goPatientEditView(curIndex.row());
 }
 

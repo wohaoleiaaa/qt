@@ -10,7 +10,7 @@ MasterView::MasterView(QWidget *parent,int index)
     ui->setupUi(this);
 
     //去除边框
-    //this->setWindowFlag(Qt::FramelessWindowHint);
+    this->setWindowFlag(Qt::FramelessWindowHint);
 
     goLoginView();
 

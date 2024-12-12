@@ -24,33 +24,52 @@
          <height>0</height>
         </size>
        </property>
+       <property name="placeholderText">
+        <string>请输入姓名进行查找</string>
+       </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="btSearch">
        <property name="text">
-        <string>查找</string>
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="lab4.qrc">
+         <normaloff>:/img/find.png</normaloff>:/img/find.png</iconset>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="btAdd">
        <property name="text">
-        <string>添加</string>
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="lab4.qrc">
+         <normaloff>:/img/add.png</normaloff>:/img/add.png</iconset>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="btDelete">
        <property name="text">
-        <string>删除</string>
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="lab4.qrc">
+         <normaloff>:/img/delete.png</normaloff>:/img/delete.png</iconset>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="btEdit">
        <property name="text">
-        <string>修改</string>
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="lab4.qrc">
+         <normaloff>:/img/edit.png</normaloff>:/img/edit.png</iconset>
        </property>
       </widget>
      </item>
@@ -61,6 +80,8 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="lab4.qrc"/>
+ </resources>
  <connections/>
 </ui>

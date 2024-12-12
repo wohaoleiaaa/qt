@@ -2,6 +2,7 @@
 #include <QDebug>
 #include <QSqlQuery>
 #include <QSqlError>
+#include <QUuid>
 void IDatabase::ininDatabase()//单例模式思想
 {
 
@@ -24,20 +25,49 @@ bool IDatabase::initPatientModel()
     patientTabModel->setTable("patient");
     patientTabModel->setEditStrategy(QSqlTableModel::OnManualSubmit);//数据保存方式
     patientTabModel->setSort(patientTabModel->fieldIndex("name"),Qt::AscendingOrder);//排序
-
+    patientTabModel = new QSqlTableModel(this,database);
+    patientTabModel->setTable("patient");
+    patientTabModel->setEditStrategy(QSqlTableModel::OnManualSubmit);
+    patientTabModel->setSort(patientTabModel->fieldIndex("name"),Qt::AscendingOrder);
     if(!(patientTabModel->select()))//查询数据
         return false;
 
     thePatientSelection = new QItemSelectionModel(patientTabModel);
     return true;
 }
-
+//用这个数据不能保存到数据库里
 int IDatabase::addNewPatient()
 {
     patientTabModel->insertRow(patientTabModel->rowCount(),QModelIndex());//在末尾添加一个记录
 
     QModelIndex curIndex = patientTabModel->index(patientTabModel->rowCount()-1,1);//创建最后一行的ModelIndex
+
+    int curRecNo = curIndex.row();
+    QSqlRecord curRec = patientTabModel->record(curRecNo);//获取当前记录
+    curRec.setValue("CREATEDTIMESTAMP",QDateTime::currentDateTime().toString("yyyy-MM-dd"));
+    curRec.setValue("ID",QUuid::createUuid().toString(QUuid::WithoutBraces));
+
+    patientTabModel->setRecord(curRecNo,curRec);
+
+    return curIndex.row();//漏了这一行没写
 }
+//下面是chat的代码，解决了这个问题
+//int IDatabase::addNewPatient()
+//{
+//    patientTabModel->insertRow(patientTabModel->rowCount(), QModelIndex()); // 插入新行
+
+//    QModelIndex curIndex = patientTabModel->index(patientTabModel->rowCount() - 1, 1); // 获取新插入行的ModelIndex
+
+//    // 提交所有修改
+//    if (patientTabModel->submitAll()) {
+//        qDebug() << "New patient added successfully.";
+//    } else {
+//        qDebug() << "Failed to add new patient: " << patientTabModel->lastError().text();
+//    }
+
+//    return patientTabModel->rowCount() - 1; // 返回新行的索引
+//}
+
 
 bool IDatabase::searchPatient(QString filter)
 {
@@ -107,3 +137,5 @@ IDatabase::IDatabase(QObject *parent) : QObject(parent)
     ininDatabase();
 
 }
+
+
