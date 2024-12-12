@@ -3,9 +3,9 @@
 #include <QtDebug>
 #include "idatabase.h"
 
-MasterView::MasterView(QWidget *parent)
-    : QWidget(parent)
-    , ui(new Ui::MasterView)
+MasterView::MasterView(QWidget *parent,int index)
+    : QWidget(parent),
+     ui(new Ui::MasterView)
 {
     ui->setupUi(this);
 
@@ -65,13 +65,16 @@ void MasterView::goDepartmentView()
     pushWidgetToStackView(departmentView);
 }
 
-void MasterView::goPatientEditView()
+void MasterView::goPatientEditView(int rowNo)
 {
     qDebug()<<"goPatientEditView";
 
-    patientEditView = new PatientEditView(this);
+    patientEditView = new PatientEditView(this,rowNo);
 
     pushWidgetToStackView(patientEditView);
+
+
+    connect(patientEditView,SIGNAL(goPreviousView()),this,SLOT(goPreviousView()));
 
 }
 
@@ -83,7 +86,7 @@ void MasterView::goPatientView()
 
     pushWidgetToStackView(patientView);
 
-    connect(patientView,SIGNAL(goPatientEditView()),this,SLOT(goPatientEditView()));
+    connect(patientView,SIGNAL(goPatientEditView(int)),this,SLOT(goPatientEditView(int)));
 
 }
 

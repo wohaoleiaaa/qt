@@ -18,6 +18,51 @@ void IDatabase::ininDatabase()//单例模式思想
 
 }
 
+bool IDatabase::initPatientModel()
+{
+    patientTabModel = new QSqlTableModel(this , database);
+    patientTabModel->setTable("patient");
+    patientTabModel->setEditStrategy(QSqlTableModel::OnManualSubmit);//数据保存方式
+    patientTabModel->setSort(patientTabModel->fieldIndex("name"),Qt::AscendingOrder);//排序
+
+    if(!(patientTabModel->select()))//查询数据
+        return false;
+
+    thePatientSelection = new QItemSelectionModel(patientTabModel);
+    return true;
+}
+
+int IDatabase::addNewPatient()
+{
+    patientTabModel->insertRow(patientTabModel->rowCount(),QModelIndex());//在末尾添加一个记录
+
+    QModelIndex curIndex = patientTabModel->index(patientTabModel->rowCount()-1,1);//创建最后一行的ModelIndex
+}
+
+bool IDatabase::searchPatient(QString filter)
+{
+    patientTabModel->setFilter(filter);
+    return patientTabModel->select();
+}
+
+bool IDatabase::deleteCurrentPatient()
+{
+    QModelIndex curIndex = thePatientSelection->currentIndex();
+    patientTabModel->removeRow(curIndex.row());
+    patientTabModel->submitAll();
+    patientTabModel->select();
+}
+
+bool IDatabase::submitPatientEdit()
+{
+    return patientTabModel->submitAll();
+}
+
+void IDatabase::revertPatientEdit()
+{
+     patientTabModel->revertAll();
+}
+
 QString IDatabase::userLogin(QString userName, QString password)
 {
     QSqlQuery query; // 查询出当前记录的所有字段
