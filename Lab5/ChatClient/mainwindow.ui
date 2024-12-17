@@ -23,7 +23,7 @@
     padding: 5px;
 	font 24pt&quot;黑体&quot;;
 	color:rgb(255,255,255);
-background-color:rgba(0,170,127,255);
+    background-color:rgba(0,170,127,255);
 
 }
 
@@ -33,7 +33,7 @@ background-color:rgba(0,170,127,255);
 }
 
 #loginFrame {
-    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #ddff, stop:1 #aaff);
+    background: rgb(159, 142, 255);
     border: 1px solid gray;
     padding: 10px;
     border-radius: 25px;
