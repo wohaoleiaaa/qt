@@ -35,16 +35,16 @@ public:
     QVBoxLayout *verticalLayout;
     QLabel *titleLabel;
     QStackedWidget *stackedWidget;
-    QWidget *loginPage;
+    QWidget *chatPage;
     QVBoxLayout *verticalLayout_3;
     QHBoxLayout *horizontalLayout;
-    QTextEdit *textEdit;
-    QListWidget *listWidget;
+    QTextEdit *roomTextEdit;
+    QListWidget *userListWidget;
     QHBoxLayout *horizontalLayout_2;
-    QLineEdit *lineEdit;
+    QLineEdit *sayLineEdit;
     QPushButton *saveButton;
     QPushButton *logoutButton;
-    QWidget *chatPage;
+    QWidget *loginPage;
     QGridLayout *gridLayout;
     QFrame *loginFrame;
     QVBoxLayout *verticalLayout_2;
@@ -103,39 +103,39 @@ public:
 
         stackedWidget = new QStackedWidget(centralwidget);
         stackedWidget->setObjectName(QString::fromUtf8("stackedWidget"));
-        loginPage = new QWidget();
-        loginPage->setObjectName(QString::fromUtf8("loginPage"));
-        verticalLayout_3 = new QVBoxLayout(loginPage);
+        chatPage = new QWidget();
+        chatPage->setObjectName(QString::fromUtf8("chatPage"));
+        verticalLayout_3 = new QVBoxLayout(chatPage);
         verticalLayout_3->setObjectName(QString::fromUtf8("verticalLayout_3"));
         horizontalLayout = new QHBoxLayout();
         horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
-        textEdit = new QTextEdit(loginPage);
-        textEdit->setObjectName(QString::fromUtf8("textEdit"));
+        roomTextEdit = new QTextEdit(chatPage);
+        roomTextEdit->setObjectName(QString::fromUtf8("roomTextEdit"));
 
-        horizontalLayout->addWidget(textEdit);
+        horizontalLayout->addWidget(roomTextEdit);
 
-        listWidget = new QListWidget(loginPage);
-        listWidget->setObjectName(QString::fromUtf8("listWidget"));
-        listWidget->setMaximumSize(QSize(120, 16777215));
+        userListWidget = new QListWidget(chatPage);
+        userListWidget->setObjectName(QString::fromUtf8("userListWidget"));
+        userListWidget->setMaximumSize(QSize(120, 16777215));
 
-        horizontalLayout->addWidget(listWidget);
+        horizontalLayout->addWidget(userListWidget);
 
 
         verticalLayout_3->addLayout(horizontalLayout);
 
         horizontalLayout_2 = new QHBoxLayout();
         horizontalLayout_2->setObjectName(QString::fromUtf8("horizontalLayout_2"));
-        lineEdit = new QLineEdit(loginPage);
-        lineEdit->setObjectName(QString::fromUtf8("lineEdit"));
+        sayLineEdit = new QLineEdit(chatPage);
+        sayLineEdit->setObjectName(QString::fromUtf8("sayLineEdit"));
 
-        horizontalLayout_2->addWidget(lineEdit);
+        horizontalLayout_2->addWidget(sayLineEdit);
 
-        saveButton = new QPushButton(loginPage);
+        saveButton = new QPushButton(chatPage);
         saveButton->setObjectName(QString::fromUtf8("saveButton"));
 
         horizontalLayout_2->addWidget(saveButton);
 
-        logoutButton = new QPushButton(loginPage);
+        logoutButton = new QPushButton(chatPage);
         logoutButton->setObjectName(QString::fromUtf8("logoutButton"));
 
         horizontalLayout_2->addWidget(logoutButton);
@@ -143,12 +143,12 @@ public:
 
         verticalLayout_3->addLayout(horizontalLayout_2);
 
-        stackedWidget->addWidget(loginPage);
-        chatPage = new QWidget();
-        chatPage->setObjectName(QString::fromUtf8("chatPage"));
-        gridLayout = new QGridLayout(chatPage);
+        stackedWidget->addWidget(chatPage);
+        loginPage = new QWidget();
+        loginPage->setObjectName(QString::fromUtf8("loginPage"));
+        gridLayout = new QGridLayout(loginPage);
         gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
-        loginFrame = new QFrame(chatPage);
+        loginFrame = new QFrame(loginPage);
         loginFrame->setObjectName(QString::fromUtf8("loginFrame"));
         loginFrame->setStyleSheet(QString::fromUtf8(""));
         loginFrame->setFrameShape(QFrame::StyledPanel);
@@ -208,7 +208,7 @@ public:
 
         gridLayout->addItem(verticalSpacer_3, 2, 1, 1, 1);
 
-        stackedWidget->addWidget(chatPage);
+        stackedWidget->addWidget(loginPage);
 
         verticalLayout->addWidget(stackedWidget);
 

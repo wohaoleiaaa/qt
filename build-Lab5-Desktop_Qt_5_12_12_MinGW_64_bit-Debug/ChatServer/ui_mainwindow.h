@@ -29,7 +29,7 @@ public:
     QVBoxLayout *verticalLayout;
     QGroupBox *groupBox;
     QHBoxLayout *horizontalLayout_2;
-    QPlainTextEdit *plainTextEdit;
+    QPlainTextEdit *logEditor;
     QHBoxLayout *horizontalLayout;
     QSpacerItem *horizontalSpacer;
     QPushButton *startStopButton;
@@ -47,10 +47,10 @@ public:
         groupBox->setObjectName(QString::fromUtf8("groupBox"));
         horizontalLayout_2 = new QHBoxLayout(groupBox);
         horizontalLayout_2->setObjectName(QString::fromUtf8("horizontalLayout_2"));
-        plainTextEdit = new QPlainTextEdit(groupBox);
-        plainTextEdit->setObjectName(QString::fromUtf8("plainTextEdit"));
+        logEditor = new QPlainTextEdit(groupBox);
+        logEditor->setObjectName(QString::fromUtf8("logEditor"));
 
-        horizontalLayout_2->addWidget(plainTextEdit);
+        horizontalLayout_2->addWidget(logEditor);
 
 
         verticalLayout->addWidget(groupBox);

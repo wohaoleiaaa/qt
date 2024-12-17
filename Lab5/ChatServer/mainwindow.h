@@ -15,6 +15,14 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+private slots:
+    void on_startStopButton_clicked();
+
+
+public slots:
+    void logMessage(const QString  &msg);
+
+
 private:
     Ui::MainWindow *ui;
 };
