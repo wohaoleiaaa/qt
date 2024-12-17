@@ -10,6 +10,7 @@
 #define UI_MASTERVIEW_H
 
 #include <QtCore/QVariant>
+#include <QtGui/QIcon>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLabel>
@@ -26,14 +27,12 @@ class Ui_MasterView
 public:
     QVBoxLayout *verticalLayout;
     QHBoxLayout *horizontalLayout;
-    QPushButton *pushButton;
+    QPushButton *btBack;
     QSpacerItem *horizontalSpacer;
-    QLabel *label;
+    QLabel *labelTitle;
     QSpacerItem *horizontalSpacer_2;
-    QPushButton *pushButton_2;
+    QPushButton *btLogout;
     QStackedWidget *stackedWidget;
-    QWidget *page;
-    QWidget *page_2;
 
     void setupUi(QWidget *MasterView)
     {
@@ -44,40 +43,40 @@ public:
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
         horizontalLayout = new QHBoxLayout();
         horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
-        pushButton = new QPushButton(MasterView);
-        pushButton->setObjectName(QString::fromUtf8("pushButton"));
+        btBack = new QPushButton(MasterView);
+        btBack->setObjectName(QString::fromUtf8("btBack"));
+        QIcon icon;
+        icon.addFile(QString::fromUtf8(":/img/back.png"), QSize(), QIcon::Normal, QIcon::Off);
+        btBack->setIcon(icon);
 
-        horizontalLayout->addWidget(pushButton);
+        horizontalLayout->addWidget(btBack);
 
         horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
         horizontalLayout->addItem(horizontalSpacer);
 
-        label = new QLabel(MasterView);
-        label->setObjectName(QString::fromUtf8("label"));
+        labelTitle = new QLabel(MasterView);
+        labelTitle->setObjectName(QString::fromUtf8("labelTitle"));
 
-        horizontalLayout->addWidget(label);
+        horizontalLayout->addWidget(labelTitle);
 
         horizontalSpacer_2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
         horizontalLayout->addItem(horizontalSpacer_2);
 
-        pushButton_2 = new QPushButton(MasterView);
-        pushButton_2->setObjectName(QString::fromUtf8("pushButton_2"));
+        btLogout = new QPushButton(MasterView);
+        btLogout->setObjectName(QString::fromUtf8("btLogout"));
+        QIcon icon1;
+        icon1.addFile(QString::fromUtf8(":/img/logout.png"), QSize(), QIcon::Normal, QIcon::Off);
+        btLogout->setIcon(icon1);
 
-        horizontalLayout->addWidget(pushButton_2);
+        horizontalLayout->addWidget(btLogout);
 
 
         verticalLayout->addLayout(horizontalLayout);
 
         stackedWidget = new QStackedWidget(MasterView);
         stackedWidget->setObjectName(QString::fromUtf8("stackedWidget"));
-        page = new QWidget();
-        page->setObjectName(QString::fromUtf8("page"));
-        stackedWidget->addWidget(page);
-        page_2 = new QWidget();
-        page_2->setObjectName(QString::fromUtf8("page_2"));
-        stackedWidget->addWidget(page_2);
 
         verticalLayout->addWidget(stackedWidget);
 
@@ -90,9 +89,9 @@ public:
     void retranslateUi(QWidget *MasterView)
     {
         MasterView->setWindowTitle(QApplication::translate("MasterView", "MasterView", nullptr));
-        pushButton->setText(QApplication::translate("MasterView", "PushButton", nullptr));
-        label->setText(QApplication::translate("MasterView", "TextLabel", nullptr));
-        pushButton_2->setText(QApplication::translate("MasterView", "PushButton", nullptr));
+        btBack->setText(QString());
+        labelTitle->setText(QString());
+        btLogout->setText(QString());
     } // retranslateUi
 
 };
