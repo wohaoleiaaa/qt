@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>482</width>
-    <height>350</height>
+    <width>558</width>
+    <height>377</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -87,7 +87,7 @@
            <widget class="QLineEdit" name="sayLineEdit"/>
           </item>
           <item>
-           <widget class="QPushButton" name="saveButton">
+           <widget class="QPushButton" name="sayButton">
             <property name="text">
              <string>发送</string>
             </property>
@@ -194,8 +194,8 @@
           </property>
          </spacer>
         </item>
-        <item row="0" column="1">
-         <spacer name="verticalSpacer_2">
+        <item row="2" column="1">
+         <spacer name="verticalSpacer_3">
           <property name="orientation">
            <enum>Qt::Vertical</enum>
           </property>
@@ -207,8 +207,8 @@
           </property>
          </spacer>
         </item>
-        <item row="2" column="1">
-         <spacer name="verticalSpacer_3">
+        <item row="0" column="1">
+         <spacer name="verticalSpacer_2">
           <property name="orientation">
            <enum>Qt::Vertical</enum>
           </property>

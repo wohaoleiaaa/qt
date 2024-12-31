@@ -42,7 +42,7 @@ public:
     QListWidget *userListWidget;
     QHBoxLayout *horizontalLayout_2;
     QLineEdit *sayLineEdit;
-    QPushButton *saveButton;
+    QPushButton *sayButton;
     QPushButton *logoutButton;
     QWidget *loginPage;
     QGridLayout *gridLayout;
@@ -64,31 +64,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
-        MainWindow->resize(482, 350);
-        MainWindow->setStyleSheet(QString::fromUtf8("#titleLabel {\n"
-"    background: white;\n"
-"    color: blue;\n"
-"    font-size: 20px;\n"
-"    border: none;\n"
-"    border-bottom: 1px solid black;\n"
-"    padding: 5px;\n"
-"	font 24pt\"\351\273\221\344\275\223\";\n"
-"	color:rgb(255,255,255);\n"
-"    background-color:rgba(0,170,127,255);\n"
-"\n"
-"}\n"
-"\n"
-"#mainFrame {\n"
-"    border: none;\n"
-"    background: white;\n"
-"}\n"
-"\n"
-"#loginFrame {\n"
-"    background: rgb(159, 142, 255);\n"
-"    border: 1px solid gray;\n"
-"    padding: 10px;\n"
-"    border-radius: 25px;\n"
-"}"));
+        MainWindow->resize(523, 373);
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
         verticalLayout = new QVBoxLayout(centralwidget);
@@ -130,10 +106,10 @@ public:
 
         horizontalLayout_2->addWidget(sayLineEdit);
 
-        saveButton = new QPushButton(chatPage);
-        saveButton->setObjectName(QString::fromUtf8("saveButton"));
+        sayButton = new QPushButton(chatPage);
+        sayButton->setObjectName(QString::fromUtf8("sayButton"));
 
-        horizontalLayout_2->addWidget(saveButton);
+        horizontalLayout_2->addWidget(sayButton);
 
         logoutButton = new QPushButton(chatPage);
         logoutButton->setObjectName(QString::fromUtf8("logoutButton"));
@@ -216,7 +192,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        stackedWidget->setCurrentIndex(1);
+        stackedWidget->setCurrentIndex(0);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -226,7 +202,7 @@ public:
     {
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "\350\201\212\345\244\251\345\256\244\345\256\242\346\210\267\347\253\257", nullptr));
         titleLabel->setText(QApplication::translate("MainWindow", "\350\264\244\345\223\245\350\201\212\345\244\251\345\256\244", nullptr));
-        saveButton->setText(QApplication::translate("MainWindow", "\345\217\221\351\200\201", nullptr));
+        sayButton->setText(QApplication::translate("MainWindow", "\345\217\221\351\200\201", nullptr));
         logoutButton->setText(QApplication::translate("MainWindow", "\351\200\200\345\207\272", nullptr));
         label_2->setText(QApplication::translate("MainWindow", "\346\234\215\345\212\241\345\231\250\345\235\200\357\274\232", nullptr));
         label_3->setText(QApplication::translate("MainWindow", "\346\230\265\347\247\260\357\274\232", nullptr));

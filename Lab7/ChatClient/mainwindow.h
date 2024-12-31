@@ -16,16 +16,15 @@ public:
     ~MainWindow();
 
 private slots:
+    void on_loginButton_clicked();
 
-
-    void on_saveButton_clicked();
+    void on_sayButton_clicked();
 
     void on_logoutButton_clicked();
 
-    void on_loginButton_clicked();
-
     void connectedToServer();
-    void messageReceived(const QString &text);
+
+    void messageReceived(const QString  &text);
 
 private:
     Ui::MainWindow *ui;
