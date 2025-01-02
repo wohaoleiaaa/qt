@@ -65,6 +65,30 @@ public:
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
         MainWindow->resize(523, 373);
+        MainWindow->setStyleSheet(QString::fromUtf8("#titleLabel {\n"
+"    background: white;\n"
+"    color: blue;\n"
+"    font-size: 20px;\n"
+"    border: none;\n"
+"    border-bottom: 1px solid black;\n"
+"    padding: 5px;\n"
+"	font 24pt\"\351\273\221\344\275\223\";\n"
+"	color:rgb(255,255,255);\n"
+"    background-color:rgba(0,170,127,255);\n"
+"\n"
+"}\n"
+"\n"
+"#mainFrame {\n"
+"    border: none;\n"
+"    background: white;\n"
+"}\n"
+"\n"
+"#loginFrame {\n"
+"    background: rgb(159, 142, 255);\n"
+"    border: 1px solid gray;\n"
+"    padding: 10px;\n"
+"    border-radius: 25px;\n"
+"}"));
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
         verticalLayout = new QVBoxLayout(centralwidget);

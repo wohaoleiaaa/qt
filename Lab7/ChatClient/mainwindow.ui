@@ -13,6 +13,32 @@
   <property name="windowTitle">
    <string>聊天室客户端</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">#titleLabel {
+    background: white;
+    color: blue;
+    font-size: 20px;
+    border: none;
+    border-bottom: 1px solid black;
+    padding: 5px;
+	font 24pt&quot;黑体&quot;;
+	color:rgb(255,255,255);
+    background-color:rgba(0,170,127,255);
+
+}
+
+#mainFrame {
+    border: none;
+    background: white;
+}
+
+#loginFrame {
+    background: rgb(159, 142, 255);
+    border: 1px solid gray;
+    padding: 10px;
+    border-radius: 25px;
+}</string>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
