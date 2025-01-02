@@ -192,7 +192,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        stackedWidget->setCurrentIndex(0);
+        stackedWidget->setCurrentIndex(1);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -206,6 +206,8 @@ public:
         logoutButton->setText(QApplication::translate("MainWindow", "\351\200\200\345\207\272", nullptr));
         label_2->setText(QApplication::translate("MainWindow", "\346\234\215\345\212\241\345\231\250\345\235\200\357\274\232", nullptr));
         label_3->setText(QApplication::translate("MainWindow", "\346\230\265\347\247\260\357\274\232", nullptr));
+        usernameEdit->setText(QApplication::translate("MainWindow", "hanjunxian", nullptr));
+        serverEdit->setText(QApplication::translate("MainWindow", "127.0.0.1", nullptr));
         loginButton->setText(QApplication::translate("MainWindow", "\347\231\273\345\275\225\350\201\212\345\244\251\345\256\244", nullptr));
     } // retranslateUi
 
