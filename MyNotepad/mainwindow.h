@@ -2,7 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-
+#include<QLabel>
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -17,5 +17,10 @@ public:
 
 private:
     Ui::MainWindow *ui;
+
+    QLabel statusCursorLabel;
+    QLabel statusLabel;
+
+
 };
 #endif // MAINWINDOW_H
