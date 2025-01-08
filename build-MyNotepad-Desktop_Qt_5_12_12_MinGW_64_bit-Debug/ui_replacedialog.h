@@ -52,7 +52,7 @@ public:
     {
         if (ReplaceDialog->objectName().isEmpty())
             ReplaceDialog->setObjectName(QString::fromUtf8("ReplaceDialog"));
-        ReplaceDialog->resize(400, 300);
+        ReplaceDialog->resize(542, 389);
         horizontalLayout_7 = new QHBoxLayout(ReplaceDialog);
         horizontalLayout_7->setObjectName(QString::fromUtf8("horizontalLayout_7"));
         horizontalLayout_6 = new QHBoxLayout();

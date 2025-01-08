@@ -49,7 +49,7 @@ public:
     {
         if (SearchDialog->objectName().isEmpty())
             SearchDialog->setObjectName(QString::fromUtf8("SearchDialog"));
-        SearchDialog->resize(401, 274);
+        SearchDialog->resize(470, 316);
         horizontalLayout_2 = new QHBoxLayout(SearchDialog);
         horizontalLayout_2->setObjectName(QString::fromUtf8("horizontalLayout_2"));
         horizontalLayout_4 = new QHBoxLayout();
