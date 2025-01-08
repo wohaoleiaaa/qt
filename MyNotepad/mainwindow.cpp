@@ -287,3 +287,110 @@ bool MainWindow::userEditConfirmed()
 }
 
 
+
+void MainWindow::on_actionUndo_triggered()
+{
+    // 获取当前激活的标签页
+    QWidget *currentWidget = tabWidget->currentWidget();
+    if (!currentWidget) {
+        QMessageBox::warning(this, tr("撤销"), tr("没有找到有效的文本编辑器！"));
+        return;  // 如果没有找到有效的标签页，直接返回
+    }
+
+    // 假设当前标签页是 QPlainTextEdit 类型的文本编辑器
+    QPlainTextEdit *currentTextEdit = qobject_cast<QPlainTextEdit*>(currentWidget);
+    if (!currentTextEdit) {
+        QMessageBox::warning(this, tr("撤销"), tr("当前标签页不是文本编辑器！"));
+        return;  // 如果不是 QPlainTextEdit 类型，显示警告并返回
+    }
+
+    // 调用撤销操作
+    currentTextEdit->undo();
+}
+
+
+void MainWindow::on_actionRedo_triggered()
+{
+    // 获取当前激活的标签页
+    QWidget *currentWidget = tabWidget->currentWidget();
+    if (!currentWidget) {
+        QMessageBox::warning(this, tr("重做"), tr("没有找到有效的文本编辑器！"));
+        return;  // 如果没有找到有效的标签页，直接返回
+    }
+
+    // 假设当前标签页是 QPlainTextEdit 类型的文本编辑器
+    QPlainTextEdit *currentTextEdit = qobject_cast<QPlainTextEdit*>(currentWidget);
+    if (!currentTextEdit) {
+        QMessageBox::warning(this, tr("重做"), tr("当前标签页不是文本编辑器！"));
+        return;  // 如果不是 QPlainTextEdit 类型，显示警告并返回
+    }
+
+    // 调用重做操作
+    currentTextEdit->redo();
+}
+
+
+void MainWindow::on_actionCut_triggered()
+{
+    // 获取当前激活的标签页
+    QWidget *currentWidget = tabWidget->currentWidget();
+    if (!currentWidget) {
+        QMessageBox::warning(this, tr("剪切"), tr("没有找到有效的文本编辑器！"));
+        return;  // 如果没有找到有效的标签页，直接返回
+    }
+
+    // 假设当前标签页是 QPlainTextEdit 类型的文本编辑器
+    QPlainTextEdit *currentTextEdit = qobject_cast<QPlainTextEdit*>(currentWidget);
+    if (!currentTextEdit) {
+        QMessageBox::warning(this, tr("剪切"), tr("当前标签页不是文本编辑器！"));
+        return;  // 如果不是 QPlainTextEdit 类型，显示警告并返回
+    }
+
+    // 调用剪切操作
+    currentTextEdit->cut();
+}
+
+
+void MainWindow::on_actionCopy_triggered()
+{
+    // 获取当前激活的标签页
+    QWidget *currentWidget = tabWidget->currentWidget();
+    if (!currentWidget) {
+        QMessageBox::warning(this, tr("复制"), tr("没有找到有效的文本编辑器！"));
+        return;  // 如果没有找到有效的标签页，直接返回
+    }
+
+    // 假设当前标签页是 QPlainTextEdit 类型的文本编辑器
+    QPlainTextEdit *currentTextEdit = qobject_cast<QPlainTextEdit*>(currentWidget);
+    if (!currentTextEdit) {
+        QMessageBox::warning(this, tr("复制"), tr("当前标签页不是文本编辑器！"));
+        return;  // 如果不是 QPlainTextEdit 类型，显示警告并返回
+    }
+
+    // 调用复制操作
+    currentTextEdit->copy();
+}
+
+
+void MainWindow::on_actionPaste_triggered()
+{
+    // 获取当前激活的标签页
+    QWidget *currentWidget = tabWidget->currentWidget();
+    if (!currentWidget) {
+        QMessageBox::warning(this, tr("粘贴"), tr("没有找到有效的文本编辑器！"));
+        return;  // 如果没有找到有效的标签页，直接返回
+    }
+
+    // 假设当前标签页是 QPlainTextEdit 类型的文本编辑器
+    QPlainTextEdit *currentTextEdit = qobject_cast<QPlainTextEdit*>(currentWidget);
+    if (!currentTextEdit) {
+        QMessageBox::warning(this, tr("粘贴"), tr("当前标签页不是文本编辑器！"));
+        return;  // 如果不是 QPlainTextEdit 类型，显示警告并返回
+    }
+
+    // 调用粘贴操作
+    currentTextEdit->paste();
+}
+
+
+
