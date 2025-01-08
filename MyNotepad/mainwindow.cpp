@@ -7,7 +7,6 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-
     statusLabel.setMaximumWidth(300);
     statusLabel.setText("length: " + QString::number(0) + "   lines: " + QString::number(1));
     ui->statusbar->addPermanentWidget(&statusLabel);

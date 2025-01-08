@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include<QLabel>
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -20,7 +21,5 @@ private:
 
     QLabel statusCursorLabel;
     QLabel statusLabel;
-
-
 };
 #endif // MAINWINDOW_H
