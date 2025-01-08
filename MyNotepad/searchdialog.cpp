@@ -1,9 +1,9 @@
-#include "aboutdialog.h"
-#include "ui_aboutdialog.h"
+#include "searchdialog.h"
+#include "ui_searchdialog.h"
 
-AboutDialog::AboutDialog(QWidget *parent) :
+SearchDialog::SearchDialog(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::AboutDialog)
+    ui(new Ui::SearchDialog)
 {
     ui->setupUi(this);
 
@@ -11,7 +11,7 @@ AboutDialog::AboutDialog(QWidget *parent) :
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 }
 
-AboutDialog::~AboutDialog()
+SearchDialog::~SearchDialog()
 {
     delete ui;
 }
