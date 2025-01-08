@@ -291,7 +291,7 @@ bool MainWindow::userEditConfirmed()
 
 
 
-void MainWindow::on_actionUndo_triggered()
+void MainWindow::on_actionUndo_triggered()//撤回
 {
     // 获取当前激活的标签页
     QWidget *currentWidget = tabWidget->currentWidget();
@@ -312,7 +312,7 @@ void MainWindow::on_actionUndo_triggered()
 }
 
 
-void MainWindow::on_actionRedo_triggered()
+void MainWindow::on_actionRedo_triggered()//恢复
 {
     // 获取当前激活的标签页
     QWidget *currentWidget = tabWidget->currentWidget();
@@ -333,7 +333,7 @@ void MainWindow::on_actionRedo_triggered()
 }
 
 
-void MainWindow::on_actionCut_triggered()
+void MainWindow::on_actionCut_triggered()//剪切
 {
     // 获取当前激活的标签页
     QWidget *currentWidget = tabWidget->currentWidget();
@@ -354,7 +354,7 @@ void MainWindow::on_actionCut_triggered()
 }
 
 
-void MainWindow::on_actionCopy_triggered()
+void MainWindow::on_actionCopy_triggered()//复制
 {
     // 获取当前激活的标签页
     QWidget *currentWidget = tabWidget->currentWidget();
@@ -375,7 +375,7 @@ void MainWindow::on_actionCopy_triggered()
 }
 
 
-void MainWindow::on_actionPaste_triggered()
+void MainWindow::on_actionPaste_triggered()//粘贴
 {
     // 获取当前激活的标签页
     QWidget *currentWidget = tabWidget->currentWidget();
@@ -396,4 +396,69 @@ void MainWindow::on_actionPaste_triggered()
 }
 
 
+void MainWindow::on_actionLightTheme_triggered() {//浅色主题
+    setLightTheme();
+}
 
+void MainWindow::on_actionDarkTheme_triggered() {//深色主题
+    setDarkTheme();
+}
+
+
+void MainWindow::setLightTheme() {//浅色主题样式表
+    qApp->setStyleSheet(R"(
+        QPlainTextEdit {
+            background-color: white;
+            color: black;
+        }
+        QMenuBar {
+            background-color: white;
+            color: black;
+        }
+        QMenuBar::item {
+            background-color: white;
+            color: black;
+        }
+        QMenu {
+            background-color: white;
+            color: black;
+        }
+        QMenu::item {
+            background-color: white;
+            color: black;
+        }
+        QStatusBar {
+            background-color: white;
+            color: black;
+        }
+    )");
+}
+
+void MainWindow::setDarkTheme() {//深色主题样式表
+    qApp->setStyleSheet(R"(
+        QPlainTextEdit {
+            background-color: #2d2d2d;
+            color: #cccccc;
+        }
+        QMenuBar {
+            background-color: #2d2d2d;
+            color: #cccccc;
+        }
+        QMenuBar::item {
+            background-color: #2d2d2d;
+            color: #cccccc;
+        }
+        QMenu {
+            background-color: #2d2d2d;
+            color: #cccccc;
+        }
+        QMenu::item {
+            background-color: #2d2d2d;
+            color: #cccccc;
+        }
+        QStatusBar {
+            background-color: #2d2d2d;
+            color: #cccccc;
+        }
+    )");
+}

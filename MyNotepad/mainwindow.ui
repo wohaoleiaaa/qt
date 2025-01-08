@@ -108,6 +108,8 @@
     <addaction name="separator"/>
     <addaction name="actionFontBgdColor"/>
     <addaction name="actionToolBgdColor"/>
+    <addaction name="actionLightTheme"/>
+    <addaction name="actionDarkTheme"/>
    </widget>
    <widget class="QMenu" name="menu_V">
     <property name="title">
@@ -449,6 +451,22 @@
    </property>
    <property name="toolTip">
     <string>字体背景色</string>
+   </property>
+  </action>
+  <action name="actionLightTheme">
+   <property name="text">
+    <string>浅色主题</string>
+   </property>
+   <property name="toolTip">
+    <string>浅色主题</string>
+   </property>
+  </action>
+  <action name="actionDarkTheme">
+   <property name="text">
+    <string>深色主题</string>
+   </property>
+   <property name="toolTip">
+    <string>深色主题</string>
    </property>
   </action>
  </widget>

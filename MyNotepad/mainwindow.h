@@ -44,6 +44,10 @@ private slots:
 
     void on_actionPaste_triggered();
 
+    void on_actionLightTheme_triggered();
+
+    void on_actionDarkTheme_triggered();
+
 private:
     Ui::MainWindow *ui;
 
@@ -61,5 +65,10 @@ private:
     void createNewTab();  // 新建标签页的函数声明
 
     SyntaxHighlighter *currentHighlighter;  // 当前标签页的语法高亮器
+
+
+    void setLightTheme();  // 设置浅色主题
+    void setDarkTheme();   // 设置深色主题
+
 };
 #endif // MAINWINDOW_H
