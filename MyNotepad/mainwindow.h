@@ -5,7 +5,7 @@
 #include<QLabel>
 #include <QTabWidget>
 #include <QPlainTextEdit>
-
+#include "syntaxhighlighter.h"
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -60,5 +60,6 @@ private:
 
     void createNewTab();  // 新建标签页的函数声明
 
+    SyntaxHighlighter *currentHighlighter;  // 当前标签页的语法高亮器
 };
 #endif // MAINWINDOW_H

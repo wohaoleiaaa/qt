@@ -10,7 +10,7 @@
 #include <QColorDialog>
 #include <QFontDialog>
 #include <QTabWidget>
-
+#include "syntaxhighlighter.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),
@@ -81,9 +81,13 @@ void MainWindow::on_actionNew_triggered() {//新建
     }
 }
 
-void MainWindow::createNewTab() {//新建标签页
+
+void MainWindow::createNewTab() {
     // 创建新的 QPlainTextEdit 作为文本编辑器
     QPlainTextEdit *newTextEdit = new QPlainTextEdit();
+
+    // 设置语法高亮(添加了)
+    new SyntaxHighlighter(newTextEdit->document());
 
     // 获取当前标签页的数量
     int tabCount = tabWidget->count();
@@ -107,7 +111,6 @@ void MainWindow::createNewTab() {//新建标签页
     // 设置窗口标题
     setWindowTitle(tr("新建文本文件~编辑器"));
 }
-
 void MainWindow::on_actionOpen_triggered() {//打开
     // 弹出文件选择对话框
     QString filename = QFileDialog::getOpenFileName(this, tr("Open File"), ".", tr("Text files (*.txt)"));
