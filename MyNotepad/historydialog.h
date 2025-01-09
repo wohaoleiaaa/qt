@@ -29,6 +29,9 @@ private slots:
 
 private:
     Ui::HistoryDialog *ui;  // 指向 UI 的指针
+    QStringList historyList;  // 存储历史记录的列表
+
+    void saveHistory();  // 保存历史记录到 QSettings
 };
 
 #endif // HISTORYDIALOG_H
