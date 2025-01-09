@@ -15,7 +15,7 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),
       ui(new Ui::MainWindow),
-      tabWidget(new QTabWidget(this)) // 创建 QTabWidget
+      tabWidget(new QTabWidget(this))// 创建 QTabWidget
 
 {
     ui->setupUi(this);
@@ -29,6 +29,10 @@ MainWindow::MainWindow(QWidget *parent)
 
     // 初始化第一个标签页
     createNewTab();  // 默认创建一个新标签页
+    // 初始化默认主题
+    setLightTheme();  // 或 setDarkTheme();
+    // 设置 actionWrap 的初始状态
+    ui->actionWrap->setChecked(isWrapEnabled);//默认自动换行
 }
 
 MainWindow::~MainWindow()
@@ -88,6 +92,9 @@ void MainWindow::createNewTab() {
 
     // 设置语法高亮(添加了)
     new SyntaxHighlighter(newTextEdit->document());
+
+    // 设置默认换行模式//新增2
+    newTextEdit->setLineWrapMode(QPlainTextEdit::WidgetWidth);  // 默认启用自动换行
 
     // 获取当前标签页的数量
     int tabCount = tabWidget->count();
@@ -462,3 +469,115 @@ void MainWindow::setDarkTheme() {//深色主题样式表
         }
     )");
 }
+
+void MainWindow::on_actionFontColor_triggered() {//字体颜色
+    // 获取当前激活的标签页
+    QWidget *currentWidget = tabWidget->currentWidget();
+    if (!currentWidget) {
+        QMessageBox::warning(this, tr("字体颜色"), tr("没有找到有效的文本编辑器！"));
+        return;  // 如果没有找到有效的标签页，直接返回
+    }
+
+    // 假设当前标签页是 QPlainTextEdit 类型的文本编辑器
+    QPlainTextEdit *currentTextEdit = qobject_cast<QPlainTextEdit*>(currentWidget);
+    if (!currentTextEdit) {
+        QMessageBox::warning(this, tr("字体颜色"), tr("当前标签页不是文本编辑器！"));
+        return;  // 如果不是 QPlainTextEdit 类型，显示警告并返回
+    }
+
+    // 打开颜色选择对话框
+    QColor color = QColorDialog::getColor(Qt::black, this, tr("选择字体颜色"));
+    if (color.isValid()) {  // 如果用户选择了有效的颜色
+        // 获取当前文本编辑器的默认文本格式
+        QTextCharFormat format;
+        format.setForeground(color);  // 设置字体颜色
+
+        // 将格式应用到整个文档
+        QTextCursor cursor = currentTextEdit->textCursor();
+        cursor.select(QTextCursor::Document);  // 选中整个文档
+        cursor.mergeCharFormat(format);        // 应用格式
+    }
+}
+
+void MainWindow::on_actionToolBgdColor_triggered() {//编辑器背景色
+    // 获取当前激活的标签页
+    QWidget *currentWidget = tabWidget->currentWidget();
+    if (!currentWidget) {
+        QMessageBox::warning(this, tr("编辑器背景色"), tr("没有找到有效的文本编辑器！"));
+        return;  // 如果没有找到有效的标签页，直接返回
+    }
+
+    // 假设当前标签页是 QPlainTextEdit 类型的文本编辑器
+    QPlainTextEdit *currentTextEdit = qobject_cast<QPlainTextEdit*>(currentWidget);
+    if (!currentTextEdit) {
+        QMessageBox::warning(this, tr("编辑器背景色"), tr("当前标签页不是文本编辑器！"));
+        return;  // 如果不是 QPlainTextEdit 类型，显示警告并返回
+    }
+
+    // 打开颜色选择对话框
+    QColor color = QColorDialog::getColor(Qt::white, this, tr("选择编辑器背景色"));
+    if (color.isValid()) {  // 如果用户选择了有效的颜色
+        // 设置编辑器背景色
+        QString styleSheet = QString("QPlainTextEdit { background-color: %1; }").arg(color.name());
+        currentTextEdit->setStyleSheet(styleSheet);
+    }
+}
+
+
+void MainWindow::on_actionFontBgdColor_triggered() {//字体背景色
+    // 获取当前激活的标签页
+    QWidget *currentWidget = tabWidget->currentWidget();
+    if (!currentWidget) {
+        QMessageBox::warning(this, tr("文本背景色"), tr("没有找到有效的文本编辑器！"));
+        return;  // 如果没有找到有效的标签页，直接返回
+    }
+
+    // 假设当前标签页是 QPlainTextEdit 类型的文本编辑器
+    QPlainTextEdit *currentTextEdit = qobject_cast<QPlainTextEdit*>(currentWidget);
+    if (!currentTextEdit) {
+        QMessageBox::warning(this, tr("文本背景色"), tr("当前标签页不是文本编辑器！"));
+        return;  // 如果不是 QPlainTextEdit 类型，显示警告并返回
+    }
+
+    // 打开颜色选择对话框
+    QColor color = QColorDialog::getColor(Qt::yellow, this, tr("选择文本背景色"));
+    if (color.isValid()) {  // 如果用户选择了有效的颜色
+        // 获取当前文本编辑器的光标
+        QTextCursor cursor = currentTextEdit->textCursor();
+
+        // 如果用户选中了文本
+        if (cursor.hasSelection()) {
+            // 创建一个文本格式对象
+            QTextCharFormat format;
+            format.setBackground(color);  // 设置文本背景色
+
+            // 将格式应用到选中的文本
+            cursor.mergeCharFormat(format);
+        } else {
+            QMessageBox::warning(this, tr("文本背景色"), tr("请先选中文本！"));
+        }
+    }
+}
+
+
+void MainWindow::on_actionWrap_triggered() {//自动换行
+    // 切换换行状态
+    isWrapEnabled = !isWrapEnabled;
+
+    // 遍历所有标签页
+    for (int i = 0; i < tabWidget->count(); ++i) {
+        QPlainTextEdit *textEdit = qobject_cast<QPlainTextEdit*>(tabWidget->widget(i));
+        if (textEdit) {
+            // 设置自动换行模式
+            if (isWrapEnabled) {
+                textEdit->setLineWrapMode(QPlainTextEdit::WidgetWidth);  // 启用自动换行
+            } else {
+                textEdit->setLineWrapMode(QPlainTextEdit::NoWrap);  // 禁用自动换行
+            }
+        }
+    }
+
+    // 更新按钮状态
+    ui->actionWrap->setChecked(isWrapEnabled);
+}
+

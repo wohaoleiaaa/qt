@@ -48,6 +48,14 @@ private slots:
 
     void on_actionDarkTheme_triggered();
 
+    void on_actionFontColor_triggered();
+
+    void on_actionToolBgdColor_triggered();
+
+    void on_actionFontBgdColor_triggered();
+
+    void on_actionWrap_triggered();
+
 private:
     Ui::MainWindow *ui;
 
@@ -69,6 +77,8 @@ private:
 
     void setLightTheme();  // 设置浅色主题
     void setDarkTheme();   // 设置深色主题
+
+    bool isWrapEnabled;  // 记录当前是否启用自动换行
 
 };
 #endif // MAINWINDOW_H
