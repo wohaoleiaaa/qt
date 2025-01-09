@@ -478,6 +478,30 @@
     <string>历史记录</string>
    </property>
   </action>
+  <action name="actionAddBookmark">
+   <property name="text">
+    <string>添加书签</string>
+   </property>
+   <property name="toolTip">
+    <string>添加书签</string>
+   </property>
+  </action>
+  <action name="actionRemoveBookmark">
+   <property name="text">
+    <string>删除书签</string>
+   </property>
+   <property name="toolTip">
+    <string>删除书签</string>
+   </property>
+  </action>
+  <action name="actionGotoBookmark">
+   <property name="text">
+    <string>加载书签</string>
+   </property>
+   <property name="toolTip">
+    <string>加载书签</string>
+   </property>
+  </action>
  </widget>
  <resources>
   <include location="notepad.qrc"/>

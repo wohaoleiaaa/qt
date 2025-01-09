@@ -53,6 +53,9 @@ public:
     QAction *actionLightTheme;
     QAction *actionDarkTheme;
     QAction *actionHistory;
+    QAction *actionAddBookmark;
+    QAction *actionRemoveBookmark;
+    QAction *actionGotoBookmark;
     QWidget *centralwidget;
     QVBoxLayout *verticalLayout;
     QTabWidget *tabWidget;
@@ -176,6 +179,12 @@ public:
         actionDarkTheme->setObjectName(QString::fromUtf8("actionDarkTheme"));
         actionHistory = new QAction(MainWindow);
         actionHistory->setObjectName(QString::fromUtf8("actionHistory"));
+        actionAddBookmark = new QAction(MainWindow);
+        actionAddBookmark->setObjectName(QString::fromUtf8("actionAddBookmark"));
+        actionRemoveBookmark = new QAction(MainWindow);
+        actionRemoveBookmark->setObjectName(QString::fromUtf8("actionRemoveBookmark"));
+        actionGotoBookmark = new QAction(MainWindow);
+        actionGotoBookmark->setObjectName(QString::fromUtf8("actionGotoBookmark"));
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
         verticalLayout = new QVBoxLayout(centralwidget);
@@ -424,6 +433,18 @@ public:
         actionHistory->setText(QApplication::translate("MainWindow", "\345\216\206\345\217\262\350\256\260\345\275\225", nullptr));
 #ifndef QT_NO_TOOLTIP
         actionHistory->setToolTip(QApplication::translate("MainWindow", "\345\216\206\345\217\262\350\256\260\345\275\225", nullptr));
+#endif // QT_NO_TOOLTIP
+        actionAddBookmark->setText(QApplication::translate("MainWindow", "\346\267\273\345\212\240\344\271\246\347\255\276", nullptr));
+#ifndef QT_NO_TOOLTIP
+        actionAddBookmark->setToolTip(QApplication::translate("MainWindow", "\346\267\273\345\212\240\344\271\246\347\255\276", nullptr));
+#endif // QT_NO_TOOLTIP
+        actionRemoveBookmark->setText(QApplication::translate("MainWindow", "\345\210\240\351\231\244\344\271\246\347\255\276", nullptr));
+#ifndef QT_NO_TOOLTIP
+        actionRemoveBookmark->setToolTip(QApplication::translate("MainWindow", "\345\210\240\351\231\244\344\271\246\347\255\276", nullptr));
+#endif // QT_NO_TOOLTIP
+        actionGotoBookmark->setText(QApplication::translate("MainWindow", "\345\212\240\350\275\275\344\271\246\347\255\276", nullptr));
+#ifndef QT_NO_TOOLTIP
+        actionGotoBookmark->setToolTip(QApplication::translate("MainWindow", "\345\212\240\350\275\275\344\271\246\347\255\276", nullptr));
 #endif // QT_NO_TOOLTIP
         tabWidget->setTabText(tabWidget->indexOf(tab), QApplication::translate("MainWindow", "Tab 1", nullptr));
         menu->setTitle(QApplication::translate("MainWindow", "\346\226\207\344\273\266(&F)", nullptr));

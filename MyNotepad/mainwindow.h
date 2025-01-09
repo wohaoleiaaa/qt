@@ -84,6 +84,12 @@ private slots:
 
     void onHistoryItemSelected(const QString &filePath);  // 处理用户选择的历史记录
 
+    void on_actionAddBookmark_triggered();
+
+    void on_actionRemoveBookmark_triggered();
+
+    void on_actionGotoBookmark_triggered();
+
 
 private:
     Ui::MainWindow *ui;
@@ -115,6 +121,10 @@ private:
     void saveHistory();  // 保存历史记录到文件
     void loadHistory();  // 从文件加载历史记录
     void updateHistory(const QString &filePath);  // 更新历史记录
+
+    QMap<int, QString> bookmarks;  // 存储书签，键为行号，值为书签描述
+    void saveBookmarks();  // 保存书签到 QSettings
+    void loadBookmarks();  // 从 QSettings 加载书签
 
 };
 #endif // MAINWINDOW_H

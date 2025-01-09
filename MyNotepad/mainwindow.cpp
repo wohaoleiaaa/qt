@@ -16,6 +16,8 @@
 #include <QDebug>
 #include "historydialog.h"
 #include <QSettings>
+#include <QInputDialog>
+#include <QLineEdit>
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),
       ui(new Ui::MainWindow),
@@ -57,6 +59,24 @@ MainWindow::MainWindow(QWidget *parent)
     // 连接标签页切换信号
     connect(tabWidget, &QTabWidget::currentChanged, this, &MainWindow::onTabChanged);
     connect(ui->actionShowline, &QAction::triggered, this, &MainWindow::on_actionShowline_triggered);
+
+    // 添加书签菜单项
+    QMenu *bookmarkMenu = ui->menubar->addMenu(tr("书签"));
+    QAction *addBookmarkAction = bookmarkMenu->addAction(tr("添加书签"));
+    QAction *removeBookmarkAction = bookmarkMenu->addAction(tr("删除书签"));
+    QAction *gotoBookmarkAction = bookmarkMenu->addAction(tr("跳转到书签"));
+
+    // 连接信号与槽
+    connect(addBookmarkAction, &QAction::triggered, this, &MainWindow::on_actionAddBookmark_triggered);
+    connect(removeBookmarkAction, &QAction::triggered, this, &MainWindow::on_actionRemoveBookmark_triggered);
+    connect(gotoBookmarkAction, &QAction::triggered, this, &MainWindow::on_actionGotoBookmark_triggered);
+
+    // 添加快捷键
+    addBookmarkAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_B));
+    gotoBookmarkAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_G));
+
+    // 加载书签
+    loadBookmarks();
 }
 
 
@@ -906,3 +926,137 @@ void MainWindow::onHistoryItemSelected(const QString &filePath)
         setWindowTitle(QFileInfo(filePath).fileName());
     }
 }
+
+void MainWindow::on_actionAddBookmark_triggered() {
+    // 获取当前激活的标签页
+    QWidget *currentWidget = tabWidget->currentWidget();
+    if (!currentWidget) {
+        QMessageBox::warning(this, tr("添加书签"), tr("没有找到有效的文本编辑器！"));
+        return;
+    }
+
+    // 获取当前文本编辑器
+    QPlainTextEdit *currentTextEdit = qobject_cast<QPlainTextEdit*>(currentWidget);
+    if (!currentTextEdit) {
+        QMessageBox::warning(this, tr("添加书签"), tr("当前标签页不是文本编辑器！"));
+        return;
+    }
+
+    // 获取当前光标所在行
+    QTextCursor cursor = currentTextEdit->textCursor();
+    int line = cursor.blockNumber() + 1;  // 行号从 1 开始
+
+    // 创建输入对话框
+    QInputDialog dialog(this);
+    dialog.setWindowFlags(dialog.windowFlags() & ~Qt::WindowContextHelpButtonHint);  // 去掉问号按钮
+    dialog.setWindowTitle(tr("添加书签"));
+    dialog.setLabelText(tr("请输入书签描述："));
+    dialog.setTextValue("");
+
+    // 显示对话框
+    if (dialog.exec() == QDialog::Accepted) {
+        QString description = dialog.textValue();
+        if (!description.isEmpty()) {
+            // 添加书签
+            bookmarks[line] = description;
+            saveBookmarks();  // 保存书签
+            QMessageBox::information(this, tr("添加书签"), tr("书签已添加！"));
+        }
+    }
+}
+
+void MainWindow::on_actionRemoveBookmark_triggered() {
+    // 获取当前激活的标签页
+    QWidget *currentWidget = tabWidget->currentWidget();
+    if (!currentWidget) {
+        QMessageBox::warning(this, tr("删除书签"), tr("没有找到有效的文本编辑器！"));
+        return;
+    }
+
+    // 获取当前文本编辑器
+    QPlainTextEdit *currentTextEdit = qobject_cast<QPlainTextEdit*>(currentWidget);
+    if (!currentTextEdit) {
+        QMessageBox::warning(this, tr("删除书签"), tr("当前标签页不是文本编辑器！"));
+        return;
+    }
+
+    // 获取当前光标所在行
+    QTextCursor cursor = currentTextEdit->textCursor();
+    int line = cursor.blockNumber() + 1;  // 行号从 1 开始
+
+    // 检查当前行是否有书签
+    if (bookmarks.contains(line)) {
+        bookmarks.remove(line);  // 删除书签
+        saveBookmarks();  // 保存书签
+        QMessageBox::information(this, tr("删除书签"), tr("书签已删除！"));
+    } else {
+        QMessageBox::warning(this, tr("删除书签"), tr("当前行没有书签！"));
+    }
+}
+
+void MainWindow::on_actionGotoBookmark_triggered() {
+    // 弹出书签列表对话框
+    QStringList bookmarkList;
+    for (auto it = bookmarks.begin(); it != bookmarks.end(); ++it) {
+        bookmarkList.append(QString("行 %1: %2").arg(it.key()).arg(it.value()));
+    }
+
+    if (bookmarkList.isEmpty()) {
+        QMessageBox::information(this, tr("跳转到书签"), tr("没有可用的书签！"));
+        return;
+    }
+
+    bool ok;
+    QString selectedBookmark = QInputDialog::getItem(this, tr("跳转到书签"), tr("请选择一个书签："), bookmarkList, 0, false, &ok);
+    if (ok && !selectedBookmark.isEmpty()) {
+        // 提取行号
+        int line = selectedBookmark.split(":")[0].split(" ")[1].toInt();
+
+        // 获取当前激活的标签页
+        QWidget *currentWidget = tabWidget->currentWidget();
+        if (!currentWidget) {
+            QMessageBox::warning(this, tr("跳转到书签"), tr("没有找到有效的文本编辑器！"));
+            return;
+        }
+
+        // 获取当前文本编辑器
+        QPlainTextEdit *currentTextEdit = qobject_cast<QPlainTextEdit*>(currentWidget);
+        if (!currentTextEdit) {
+            QMessageBox::warning(this, tr("跳转到书签"), tr("当前标签页不是文本编辑器！"));
+            return;
+        }
+
+        // 跳转到指定行
+        QTextCursor cursor = currentTextEdit->textCursor();
+        cursor.movePosition(QTextCursor::Start);  // 移动到文档开头
+        cursor.movePosition(QTextCursor::NextBlock, QTextCursor::MoveAnchor, line - 1);  // 移动到指定行
+        currentTextEdit->setTextCursor(cursor);  // 设置光标位置
+        currentTextEdit->setFocus();  // 聚焦到文本编辑器
+    }
+}
+
+void MainWindow::saveBookmarks() {
+    QSettings settings("MyCompany", "MyEditor");
+    settings.beginWriteArray("bookmarks");
+    int index = 0;
+    for (auto it = bookmarks.begin(); it != bookmarks.end(); ++it) {
+        settings.setArrayIndex(index);
+        settings.setValue("line", it.key());
+        settings.setValue("description", it.value());
+        index++;
+    }
+    settings.endArray();
+}
+
+void MainWindow::loadBookmarks() {
+    QSettings settings("MyCompany", "MyEditor");
+    int size = settings.beginReadArray("bookmarks");
+    for (int i = 0; i < size; ++i) {
+        settings.setArrayIndex(i);
+        int line = settings.value("line").toInt();
+        QString description = settings.value("description").toString();
+        bookmarks[line] = description;
+    }
+    settings.endArray();
+}
+
