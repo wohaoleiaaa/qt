@@ -117,6 +117,7 @@
     </property>
     <addaction name="actiontoolbar"/>
     <addaction name="actionStatusbar"/>
+    <addaction name="actionHistory"/>
    </widget>
    <widget class="QMenu" name="menu_H">
     <property name="title">
@@ -467,6 +468,14 @@
    </property>
    <property name="toolTip">
     <string>深色主题</string>
+   </property>
+  </action>
+  <action name="actionHistory">
+   <property name="text">
+    <string>历史记录</string>
+   </property>
+   <property name="toolTip">
+    <string>历史记录</string>
    </property>
   </action>
  </widget>

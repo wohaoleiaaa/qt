@@ -11,7 +11,7 @@
 #include <QTextCursor>
 #include <QTextCharFormat>
 #include <QMouseEvent>
-
+#include "historydialog.h"
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -80,6 +80,11 @@ private slots:
 
     void on_actionShowline_triggered(bool checked);
 
+    void on_actionHistory_triggered();  // 打开历史记录对话框
+
+    void onHistoryItemSelected(const QString &filePath);  // 处理用户选择的历史记录
+
+
 private:
     Ui::MainWindow *ui;
 
@@ -105,6 +110,11 @@ private:
     bool isWrapEnabled;  // 记录当前是否启用自动换行
 
     void highlightLinks(QPlainTextEdit *textEdit); // 高亮显示超链接
+
+    QStringList historyList;  // 保存历史记录
+    void saveHistory();  // 保存历史记录到文件
+    void loadHistory();  // 从文件加载历史记录
+    void updateHistory(const QString &filePath);  // 更新历史记录
 
 };
 #endif // MAINWINDOW_H

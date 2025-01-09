@@ -52,6 +52,7 @@ public:
     QAction *actionFontBgdColor;
     QAction *actionLightTheme;
     QAction *actionDarkTheme;
+    QAction *actionHistory;
     QWidget *centralwidget;
     QVBoxLayout *verticalLayout;
     QTabWidget *tabWidget;
@@ -173,6 +174,8 @@ public:
         actionLightTheme->setObjectName(QString::fromUtf8("actionLightTheme"));
         actionDarkTheme = new QAction(MainWindow);
         actionDarkTheme->setObjectName(QString::fromUtf8("actionDarkTheme"));
+        actionHistory = new QAction(MainWindow);
+        actionHistory->setObjectName(QString::fromUtf8("actionHistory"));
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
         verticalLayout = new QVBoxLayout(centralwidget);
@@ -249,6 +252,7 @@ public:
         menu_O->addAction(actionDarkTheme);
         menu_V->addAction(actiontoolbar);
         menu_V->addAction(actionStatusbar);
+        menu_V->addAction(actionHistory);
         menu_H->addAction(actionAbout);
         toolBar->addAction(actionNew);
         toolBar->addAction(actionOpen);
@@ -416,6 +420,10 @@ public:
         actionDarkTheme->setText(QApplication::translate("MainWindow", "\346\267\261\350\211\262\344\270\273\351\242\230", nullptr));
 #ifndef QT_NO_TOOLTIP
         actionDarkTheme->setToolTip(QApplication::translate("MainWindow", "\346\267\261\350\211\262\344\270\273\351\242\230", nullptr));
+#endif // QT_NO_TOOLTIP
+        actionHistory->setText(QApplication::translate("MainWindow", "\345\216\206\345\217\262\350\256\260\345\275\225", nullptr));
+#ifndef QT_NO_TOOLTIP
+        actionHistory->setToolTip(QApplication::translate("MainWindow", "\345\216\206\345\217\262\350\256\260\345\275\225", nullptr));
 #endif // QT_NO_TOOLTIP
         tabWidget->setTabText(tabWidget->indexOf(tab), QApplication::translate("MainWindow", "Tab 1", nullptr));
         menu->setTitle(QApplication::translate("MainWindow", "\346\226\207\344\273\266(&F)", nullptr));

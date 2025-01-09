@@ -14,6 +14,8 @@
 #include <QPlainTextEdit>
 #include "codeeditor.h"
 #include <QDebug>
+#include "historydialog.h"
+#include <QSettings>
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),
       ui(new Ui::MainWindow),
@@ -43,6 +45,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     // 设置初始状态为显示行号
     on_actionShowline_triggered(false); // 调用槽函数，不显示行号
+
+    // 初始化历史记录
+    loadHistory();  // 加载历史记录
 
     // 手动连接信号与槽
     QPlainTextEdit *textEdit = qobject_cast<QPlainTextEdit*>(tabWidget->currentWidget());
@@ -150,6 +155,9 @@ void MainWindow::on_actionOpen_triggered() {//打开
 
     // 更新窗口标题
     setWindowTitle(QFileInfo(filename).absoluteFilePath());
+
+    // 更新历史记录
+    updateHistory(filename);  // 添加这一行
 }
 
 
@@ -830,4 +838,71 @@ void MainWindow::highlightLinks(QPlainTextEdit *textEdit) {
 
     // 重新连接 textChanged 信号
     connect(textEdit, &QPlainTextEdit::textChanged, this, &MainWindow::on_textEdit_textChanged);
+}
+
+void MainWindow::saveHistory()
+{
+    QSettings settings("MyCompany", "MyEditor");
+    settings.setValue("history", historyList);
+}
+
+void MainWindow::loadHistory()
+{
+    QSettings settings("MyCompany", "MyEditor");
+    historyList = settings.value("history").toStringList();
+}
+
+void MainWindow::updateHistory(const QString &filePath)
+{
+    // 如果文件路径已经存在于历史记录中，先移除
+    historyList.removeAll(filePath);
+
+    // 将新的文件路径添加到历史记录的最前面
+    historyList.prepend(filePath);
+
+    // 如果历史记录超过10个，移除最旧的一个
+    if (historyList.size() > 10) {
+        historyList.removeLast();
+    }
+
+    // 保存历史记录
+    saveHistory();
+}
+
+void MainWindow::on_actionHistory_triggered()
+{
+    // 创建历史记录对话框
+    HistoryDialog dialog(this);
+    dialog.setHistory(historyList);
+
+    // 连接信号与槽
+    connect(&dialog, &HistoryDialog::historyItemSelected, this, &MainWindow::onHistoryItemSelected);
+
+    // 显示对话框
+    if (dialog.exec() == QDialog::Accepted) {
+        // 更新历史记录
+        historyList = dialog.getHistory();
+        saveHistory();
+    }
+}
+
+void MainWindow::onHistoryItemSelected(const QString &filePath)
+{
+    // 打开用户选择的历史文件
+    QFile file(filePath);
+    if (!file.open(QFile::ReadOnly | QFile::Text)) {
+        QMessageBox::warning(this, tr("打开文件"), tr("无法打开文件：%1").arg(filePath));
+        return;
+    }
+
+    QTextStream in(&file);
+    QString text = in.readAll();
+    file.close();
+
+    // 在当前标签页中显示文件内容
+    QPlainTextEdit *currentTextEdit = qobject_cast<QPlainTextEdit*>(tabWidget->currentWidget());
+    if (currentTextEdit) {
+        currentTextEdit->setPlainText(text);
+        setWindowTitle(QFileInfo(filePath).fileName());
+    }
 }
