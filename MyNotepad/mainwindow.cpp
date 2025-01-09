@@ -33,7 +33,17 @@ MainWindow::MainWindow(QWidget *parent)
     setLightTheme();  // 或 setDarkTheme();
     // 设置 actionWrap 的初始状态
     ui->actionWrap->setChecked(isWrapEnabled);//默认自动换行
-}
+
+        ui->actiontoolbar->setChecked(true);//默认显示工具栏
+        ui->actionStatusbar->setChecked(true);//默认显示状态栏
+
+        // 手动连接信号与槽
+        QPlainTextEdit *textEdit = qobject_cast<QPlainTextEdit*>(tabWidget->currentWidget());
+        if (textEdit) {
+            connect(textEdit, &QPlainTextEdit::textChanged, this, &MainWindow::on_textEdit_textChanged);
+        }
+    }
+
 
 MainWindow::~MainWindow()
 {
@@ -269,30 +279,86 @@ void MainWindow::on_actionSaveAs_triggered() {//另存为
     textChanged = false;  // 修改标志设为 false，表示没有更改了
 }
 
-bool MainWindow::userEditConfirmed()
-{
-    if(textChanged){
+void MainWindow::on_textEdit_textChanged() {
+    // 获取当前激活的标签页
+    QWidget *currentWidget = tabWidget->currentWidget();
+    if (!currentWidget) {
+        return;  // 如果没有找到有效的标签页，直接返回
+    }
 
-        QString path = (filePath !="") ? filePath : "无标题.txt";
+    // 假设当前标签页是 QPlainTextEdit 类型的文本编辑器
+    QPlainTextEdit *currentTextEdit = qobject_cast<QPlainTextEdit*>(currentWidget);
+    if (!currentTextEdit) {
+        return;  // 如果不是 QPlainTextEdit 类型，直接返回
+    }
+
+    // 如果文本是第一次被修改，则在窗口标题前添加 * 符号
+    if (!textChanged) {
+        QString title = this->windowTitle();
+        if (!title.startsWith("*")) {
+            this->setWindowTitle("*" + title);  // 添加 * 符号
+        }
+        textChanged = true;  // 标记文本已被修改
+    }
+
+    // 更新状态栏中的文本信息
+    int length = currentTextEdit->toPlainText().length();  // 获取文本长度
+    int lines = currentTextEdit->document()->lineCount();  // 获取文本行数
+
+    // 更新状态栏中的长度和行数信息
+    statusLabel.setText("length: " + QString::number(length) + "   lines: " + QString::number(lines));
+
+    // 获取光标位置信息
+    QTextCursor cursor = currentTextEdit->textCursor();
+    int line = cursor.blockNumber() + 1;  // 获取当前行号（从 1 开始）
+    int column = cursor.columnNumber() + 1;  // 获取当前列号（从 1 开始）
+
+    // 更新状态栏中的光标位置信息
+    statusCursorLabel.setText("Ln: " + QString::number(line) + "    Col: " + QString::number(column));
+}
+
+
+bool MainWindow::userEditConfirmed() {
+    // 如果有未保存的更改
+    if (textChanged) {
+        // 获取当前文件的路径，如果文件路径为空，则使用默认名称 "无标题.txt"
+        QString path = (filePath != "") ? filePath : "无标题.txt";
+
+        // 创建一个消息框，提示用户是否保存更改
         QMessageBox msg(this);
-        msg.setIcon(QMessageBox::Question);
-        msg.setWindowTitle("...");
-        msg.setWindowFlag(Qt::Drawer);
-        msg.setText(QString("是否将更改保存到\n") + "\"" + path + "\"?");
-        msg.setStandardButtons(QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
+        msg.setIcon(QMessageBox::Question);  // 设置图标为问号
+        msg.setWindowTitle("保存更改");      // 设置窗口标题
+        msg.setText(QString("是否将更改保存到\n") + "\"" + path + "\"?");  // 设置提示信息
+        msg.setStandardButtons(QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);  // 设置按钮
 
-        int r = msg.exec();
-        switch(r){
+        // 显示消息框并获取用户的选择
+        int result = msg.exec();
+
+        // 根据用户的选择进行处理
+        switch (result) {
         case QMessageBox::Yes:
-            on_actionSaveAs_triggered();
+            // 用户选择保存文件
+            if (filePath.isEmpty()) {
+                // 如果文件路径为空，调用“另存为”功能
+                on_actionSaveAs_triggered();
+            } else {
+                // 如果文件路径不为空，直接保存文件
+                on_actionSave_triggered();
+            }
             break;
+
         case QMessageBox::No:
+            // 用户选择不保存文件，重置 textChanged 标志
             textChanged = false;
             break;
+
         case QMessageBox::Cancel:
+            // 用户选择取消操作，返回 false
             return false;
         }
     }
+
+    // 如果没有未保存的更改，或者用户选择保存/不保存，返回 true
     return true;
 }
 
@@ -604,4 +670,55 @@ void MainWindow::on_actionFont_triggered() {//字体
         // 将选择的字体应用到当前文本编辑器
         currentTextEdit->setFont(font);
     }
+}
+
+void MainWindow::on_actiontoolbar_triggered()//工具栏
+{
+
+    bool visible = ui->toolBar->isVisible();
+    ui->toolBar->setVisible(!visible);
+    ui->actiontoolbar->setChecked(!visible);
+
+}
+
+
+void MainWindow::on_actionStatusbar_triggered()//状态栏
+{
+
+    bool visible = ui->statusbar->isVisible();
+    ui->statusbar->setVisible(!visible);
+    ui->actionStatusbar->setChecked(!visible);
+
+}
+
+
+
+void MainWindow::on_actionSelectAll_triggered() {//全选
+    // 获取当前激活的标签页
+    QWidget *currentWidget = tabWidget->currentWidget();
+    if (!currentWidget) {
+        QMessageBox::warning(this, tr("全选"), tr("没有找到有效的文本编辑器！"));
+        return;  // 如果没有找到有效的标签页，直接返回
+    }
+
+    // 假设当前标签页是 QPlainTextEdit 类型的文本编辑器
+    QPlainTextEdit *currentTextEdit = qobject_cast<QPlainTextEdit*>(currentWidget);
+    if (!currentTextEdit) {
+        QMessageBox::warning(this, tr("全选"), tr("当前标签页不是文本编辑器！"));
+        return;  // 如果不是 QPlainTextEdit 类型，显示警告并返回
+    }
+
+    // 选中所有文本
+    currentTextEdit->selectAll();
+}
+
+
+void MainWindow::on_actionExit_triggered() {//退出
+    // 检查是否有未保存的更改
+    if (!userEditConfirmed()) {
+        return;  // 如果用户取消退出操作，直接返回
+    }
+
+    // 退出应用程序
+    QApplication::quit();
 }

@@ -33,6 +33,7 @@ private slots:
 
     void on_actionSaveAs_triggered();
 
+    void on_textEdit_textChanged();  // 文本内容变化时的槽函数
 
     void on_actionUndo_triggered();
 
@@ -57,6 +58,14 @@ private slots:
     void on_actionWrap_triggered();
 
     void on_actionFont_triggered();
+
+    void on_actiontoolbar_triggered();
+
+    void on_actionStatusbar_triggered();
+
+    void on_actionSelectAll_triggered();
+
+    void on_actionExit_triggered();
 
 private:
     Ui::MainWindow *ui;
