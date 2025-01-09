@@ -59,9 +59,8 @@ void MainWindow::on_actionAbout_triggered()//关于界面
 }
 
 
-void MainWindow::on_actionFind_triggered()//查找界面
-{
-    SearchDialog dlg;
+void MainWindow::on_actionFind_triggered() {
+    SearchDialog dlg(this, tabWidget);  // 传入 tabWidget
     dlg.exec();
 }
 
