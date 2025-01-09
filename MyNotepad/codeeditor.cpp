@@ -1,8 +1,10 @@
-// codeeditor.cpp
 #include "codeeditor.h"
 #include <QPainter>
 #include <QTextBlock>
-
+#include <QRegularExpression> // 添加 QRegularExpression 头文件
+#include <QDesktopServices>   // 添加 QDesktopServices 头文件
+#include <QUrl>               // 添加 QUrl 头文件
+#include <QDebug>
 CodeEditor::CodeEditor(QWidget *parent) : QPlainTextEdit(parent), isLineNumberAreaVisible(true) // 默认显示行号
 {
     lineNumberArea = new LineNumberArea(this);
@@ -105,5 +107,93 @@ void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
         top = bottom;
         bottom = top + (int) blockBoundingRect(block).height();
         ++blockNumber;
+    }
+}
+void CodeEditor::mousePressEvent(QMouseEvent *event) {
+    qDebug() << "mousePressEvent called"; // 调试信息
+
+    // 先调用基类的 mousePressEvent，确保默认行为正常
+    QPlainTextEdit::mousePressEvent(event);
+
+    if (event->button() == Qt::LeftButton) {
+        // 获取光标位置
+        QTextCursor cursor = cursorForPosition(event->pos());
+        if (!cursor.isNull()) {
+            // 选中整行文本
+            cursor.select(QTextCursor::LineUnderCursor);
+            QString selectedText = cursor.selectedText();
+
+            qDebug() << "Selected text:" << selectedText; // 调试信息
+
+            // 正则表达式匹配 URL 和邮件地址
+            QRegularExpression urlRegex(R"((https?://|www\.|ftp://|mailto:)[^\s]+)");
+            QRegularExpression emailRegex(R"([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})");
+
+            // 从选中的文本中提取完整的 URL 或邮件地址
+            QRegularExpressionMatch urlMatch = urlRegex.match(selectedText);
+            QRegularExpressionMatch emailMatch = emailRegex.match(selectedText);
+
+            if (urlMatch.hasMatch()) {
+                QUrl url(urlMatch.captured());
+                if (url.scheme().isEmpty()) {
+                    url.setScheme("http");  // 默认使用 http 协议
+                }
+
+                qDebug() << "Attempting to open URL:" << url.toString(); // 调试信息
+
+                // 调用系统默认程序打开链接
+                if (!QDesktopServices::openUrl(url)) {
+                    qDebug() << "Failed to open URL:" << url.toString(); // 调试信息
+                }
+            } else if (emailMatch.hasMatch()) {
+                QUrl url("mailto:" + emailMatch.captured());
+
+                qDebug() << "Attempting to open email:" << url.toString(); // 调试信息
+
+                // 调用系统默认程序打开邮件地址
+                if (!QDesktopServices::openUrl(url)) {
+                    qDebug() << "Failed to open email:" << url.toString(); // 调试信息
+                }
+            } else {
+                qDebug() << "Selected text is not a valid URL or email:" << selectedText; // 调试信息
+            }
+        }
+    }
+}
+void CodeEditor::highlightLinks() {
+    QTextDocument *document = this->document();
+    QTextCursor cursor(document);
+
+    // 清除之前的高亮
+    QTextCharFormat plainFormat;
+    cursor.select(QTextCursor::Document);
+    cursor.mergeCharFormat(plainFormat);
+
+    // 高亮 URL
+    QRegularExpression urlRegex(R"((https?://|www\.|ftp://|mailto:)[^\s]+)");
+    QTextCharFormat urlFormat;
+    urlFormat.setForeground(Qt::blue);
+    urlFormat.setFontUnderline(true);
+
+    cursor = QTextCursor(document);
+    while (!cursor.isNull() && !cursor.atEnd()) {
+        cursor = document->find(urlRegex, cursor);
+        if (!cursor.isNull()) {
+            cursor.mergeCharFormat(urlFormat);
+        }
+    }
+
+    // 高亮邮件地址
+    QRegularExpression emailRegex(R"([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})");
+    QTextCharFormat emailFormat;
+    emailFormat.setForeground(Qt::blue);
+    emailFormat.setFontUnderline(true);
+
+    cursor = QTextCursor(document);
+    while (!cursor.isNull() && !cursor.atEnd()) {
+        cursor = document->find(emailRegex, cursor);
+        if (!cursor.isNull()) {
+            cursor.mergeCharFormat(emailFormat);
+        }
     }
 }

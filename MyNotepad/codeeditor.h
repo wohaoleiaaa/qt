@@ -1,4 +1,3 @@
-// codeeditor.h
 #ifndef CODEEDITOR_H
 #define CODEEDITOR_H
 
@@ -20,6 +19,7 @@ public:
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
+        void mousePressEvent(QMouseEvent *event) override; // 重写鼠标点击事件
 
 private slots:
     void updateLineNumberAreaWidth(int newBlockCount);
@@ -29,6 +29,8 @@ private slots:
 private:
     QWidget *lineNumberArea;
     bool isLineNumberAreaVisible; // 新增成员变量
+
+        void highlightLinks(); // 高亮显示超链接
 };
 
 class LineNumberArea : public QWidget

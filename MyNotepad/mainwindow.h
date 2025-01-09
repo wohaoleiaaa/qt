@@ -3,9 +3,14 @@
 
 #include <QMainWindow>
 #include<QLabel>
-#include <QTabWidget>
-#include <QPlainTextEdit>
+#include <QTabWidget>  // 引入 QTabWidget
+#include <QPlainTextEdit>  // 引入 QPlainTextEdit 以便使用文本编辑器
 #include "syntaxhighlighter.h"
+#include <QRegularExpression>
+#include <QDesktopServices>
+#include <QTextCursor>
+#include <QTextCharFormat>
+#include <QMouseEvent>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -98,6 +103,8 @@ private:
     void setDarkTheme();   // 设置深色主题
 
     bool isWrapEnabled;  // 记录当前是否启用自动换行
+
+    void highlightLinks(QPlainTextEdit *textEdit); // 高亮显示超链接
 
 };
 #endif // MAINWINDOW_H

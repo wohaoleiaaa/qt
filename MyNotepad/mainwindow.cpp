@@ -13,7 +13,7 @@
 #include "syntaxhighlighter.h"
 #include <QPlainTextEdit>
 #include "codeeditor.h"
-
+#include <QDebug>
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),
       ui(new Ui::MainWindow),
@@ -41,6 +41,8 @@ MainWindow::MainWindow(QWidget *parent)
     // 设置 actionWrap 的初始状态
     ui->actionWrap->setChecked(isWrapEnabled);
 
+    // 设置初始状态为显示行号
+    on_actionShowline_triggered(false); // 调用槽函数，不显示行号
 
     // 手动连接信号与槽
     QPlainTextEdit *textEdit = qobject_cast<QPlainTextEdit*>(tabWidget->currentWidget());
@@ -49,6 +51,7 @@ MainWindow::MainWindow(QWidget *parent)
     }
     // 连接标签页切换信号
     connect(tabWidget, &QTabWidget::currentChanged, this, &MainWindow::onTabChanged);
+    connect(ui->actionShowline, &QAction::triggered, this, &MainWindow::on_actionShowline_triggered);
 }
 
 
@@ -275,6 +278,9 @@ void MainWindow::on_textEdit_textChanged() {
         }
         textChanged = true;  // 标记文本已被修改
     }
+
+    // 高亮显示超链接
+    highlightLinks(currentTextEdit);
 
     // 更新状态栏中的文本信息
     int length = currentTextEdit->toPlainText().length();  // 获取文本长度
@@ -780,3 +786,48 @@ void MainWindow::on_actionShowline_triggered(bool checked)//显示行号
     }
 }
 
+void MainWindow::highlightLinks(QPlainTextEdit *textEdit) {
+    qDebug() << "highlightLinks called"; // 调试信息
+
+    // 断开 textChanged 信号，避免递归调用
+    disconnect(textEdit, &QPlainTextEdit::textChanged, this, &MainWindow::on_textEdit_textChanged);
+
+    QTextDocument *document = textEdit->document();
+    QTextCursor cursor(document);
+
+    // 清除之前的高亮
+    QTextCharFormat plainFormat;
+    cursor.select(QTextCursor::Document);
+    cursor.mergeCharFormat(plainFormat);
+
+    // 高亮 URL
+    QRegularExpression urlRegex(R"((https?://|www\.|ftp://|mailto:)[^\s]+)");
+    QTextCharFormat urlFormat;
+    urlFormat.setForeground(Qt::blue);
+    urlFormat.setFontUnderline(true);
+
+    cursor = QTextCursor(document);
+    while (!cursor.isNull() && !cursor.atEnd()) {
+        cursor = document->find(urlRegex, cursor);
+        if (!cursor.isNull()) {
+            cursor.mergeCharFormat(urlFormat);
+        }
+    }
+
+    // 高亮邮件地址
+    QRegularExpression emailRegex(R"([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})");
+    QTextCharFormat emailFormat;
+    emailFormat.setForeground(Qt::blue);
+    emailFormat.setFontUnderline(true);
+
+    cursor = QTextCursor(document);
+    while (!cursor.isNull() && !cursor.atEnd()) {
+        cursor = document->find(emailRegex, cursor);
+        if (!cursor.isNull()) {
+            cursor.mergeCharFormat(emailFormat);
+        }
+    }
+
+    // 重新连接 textChanged 信号
+    connect(textEdit, &QPlainTextEdit::textChanged, this, &MainWindow::on_textEdit_textChanged);
+}
