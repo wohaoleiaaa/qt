@@ -581,3 +581,27 @@ void MainWindow::on_actionWrap_triggered() {//自动换行
     ui->actionWrap->setChecked(isWrapEnabled);
 }
 
+
+void MainWindow::on_actionFont_triggered() {//字体
+    // 获取当前激活的标签页
+    QWidget *currentWidget = tabWidget->currentWidget();
+    if (!currentWidget) {
+        QMessageBox::warning(this, tr("字体设置"), tr("没有找到有效的文本编辑器！"));
+        return;  // 如果没有找到有效的标签页，直接返回
+    }
+
+    // 假设当前标签页是 QPlainTextEdit 类型的文本编辑器
+    QPlainTextEdit *currentTextEdit = qobject_cast<QPlainTextEdit*>(currentWidget);
+    if (!currentTextEdit) {
+        QMessageBox::warning(this, tr("字体设置"), tr("当前标签页不是文本编辑器！"));
+        return;  // 如果不是 QPlainTextEdit 类型，显示警告并返回
+    }
+
+    // 打开字体选择对话框
+    bool ok;
+    QFont font = QFontDialog::getFont(&ok, currentTextEdit->font(), this, tr("选择字体"));
+    if (ok) {  // 如果用户点击了“确定”按钮
+        // 将选择的字体应用到当前文本编辑器
+        currentTextEdit->setFont(font);
+    }
+}
