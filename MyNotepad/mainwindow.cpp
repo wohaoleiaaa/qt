@@ -11,16 +11,22 @@
 #include <QFontDialog>
 #include <QTabWidget>
 #include "syntaxhighlighter.h"
+#include <QPlainTextEdit>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),
       ui(new Ui::MainWindow),
-      tabWidget(new QTabWidget(this))// 创建 QTabWidget
+      tabWidget(new QTabWidget(this)) // 创建 QTabWidget
 
 {
     ui->setupUi(this);
     setCentralWidget(tabWidget); // 设置 QTabWidget 为中央控件
 
+    // 初始化状态栏
+    statusLabel = new QLabel(this);  // 用于显示总长度和总行数
+    statusCursorLabel = new QLabel(this);  // 用于显示行号和列号
+    ui->statusbar->addPermanentWidget(statusLabel);  // 添加到状态栏
+    ui->statusbar->addPermanentWidget(statusCursorLabel);  // 添加到状态栏
 
     QLabel *author = new QLabel(ui->statusbar);
     author->setText(tr("汉俊贤"));
@@ -32,17 +38,17 @@ MainWindow::MainWindow(QWidget *parent)
     // 初始化默认主题
     setLightTheme();  // 或 setDarkTheme();
     // 设置 actionWrap 的初始状态
-    ui->actionWrap->setChecked(isWrapEnabled);//默认自动换行
+    ui->actionWrap->setChecked(isWrapEnabled);
 
-        ui->actiontoolbar->setChecked(true);//默认显示工具栏
-        ui->actionStatusbar->setChecked(true);//默认显示状态栏
 
-        // 手动连接信号与槽
-        QPlainTextEdit *textEdit = qobject_cast<QPlainTextEdit*>(tabWidget->currentWidget());
-        if (textEdit) {
-            connect(textEdit, &QPlainTextEdit::textChanged, this, &MainWindow::on_textEdit_textChanged);
-        }
+    // 手动连接信号与槽
+    QPlainTextEdit *textEdit = qobject_cast<QPlainTextEdit*>(tabWidget->currentWidget());
+    if (textEdit) {
+        connect(textEdit, &QPlainTextEdit::textChanged, this, &MainWindow::on_textEdit_textChanged);
     }
+    // 连接标签页切换信号
+    connect(tabWidget, &QTabWidget::currentChanged, this, &MainWindow::onTabChanged);
+}
 
 
 MainWindow::~MainWindow()
@@ -95,38 +101,7 @@ void MainWindow::on_actionNew_triggered() {//新建
 }
 
 
-void MainWindow::createNewTab() {
-    // 创建新的 QPlainTextEdit 作为文本编辑器
-    QPlainTextEdit *newTextEdit = new QPlainTextEdit();
 
-    // 设置语法高亮(添加了)
-    new SyntaxHighlighter(newTextEdit->document());
-
-    // 设置默认换行模式//新增2
-    newTextEdit->setLineWrapMode(QPlainTextEdit::WidgetWidth);  // 默认启用自动换行
-
-    // 获取当前标签页的数量
-    int tabCount = tabWidget->count();
-
-    // 生成新标签页的名称（标签1、标签2、标签3...）
-    QString tabName = tr("标签%1").arg(tabCount + 1);
-
-    // 将新文本编辑器添加到新标签页中
-    int index = tabWidget->addTab(newTextEdit, tabName);
-
-    // 设置新标签页为当前选中的标签页
-    tabWidget->setCurrentIndex(index);
-
-    // 初始化状态（如清空文本，设置标题等）
-    filePath = "";
-    textChanged = false;
-
-    // 清除新标签页中的内容
-    newTextEdit->clear();
-
-    // 设置窗口标题
-    setWindowTitle(tr("新建文本文件~编辑器"));
-}
 void MainWindow::on_actionOpen_triggered() {//打开
     // 弹出文件选择对话框
     QString filename = QFileDialog::getOpenFileName(this, tr("Open File"), ".", tr("Text files (*.txt)"));
@@ -305,17 +280,8 @@ void MainWindow::on_textEdit_textChanged() {
     int lines = currentTextEdit->document()->lineCount();  // 获取文本行数
 
     // 更新状态栏中的长度和行数信息
-    statusLabel.setText("length: " + QString::number(length) + "   lines: " + QString::number(lines));
-
-    // 获取光标位置信息
-    QTextCursor cursor = currentTextEdit->textCursor();
-    int line = cursor.blockNumber() + 1;  // 获取当前行号（从 1 开始）
-    int column = cursor.columnNumber() + 1;  // 获取当前列号（从 1 开始）
-
-    // 更新状态栏中的光标位置信息
-    statusCursorLabel.setText("Ln: " + QString::number(line) + "    Col: " + QString::number(column));
+    statusLabel->setText("Length: " + QString::number(length) + "   Lines: " + QString::number(lines));
 }
-
 
 bool MainWindow::userEditConfirmed() {
     // 如果有未保存的更改
@@ -359,6 +325,44 @@ bool MainWindow::userEditConfirmed() {
 
     // 如果没有未保存的更改，或者用户选择保存/不保存，返回 true
     return true;
+}
+
+
+void MainWindow::createNewTab() {
+    // 创建新的 QPlainTextEdit 作为文本编辑器
+    QPlainTextEdit *newTextEdit = new QPlainTextEdit();
+
+    // 设置语法高亮
+    new SyntaxHighlighter(newTextEdit->document());
+
+    // 设置默认换行模式
+    newTextEdit->setLineWrapMode(QPlainTextEdit::WidgetWidth);  // 默认启用自动换行
+
+    // 获取当前标签页的数量
+    int tabCount = tabWidget->count();
+
+    // 生成新标签页的名称（标签1、标签2、标签3...）
+    QString tabName = tr("标签%1").arg(tabCount + 1);
+
+    // 将新文本编辑器添加到新标签页中
+    int index = tabWidget->addTab(newTextEdit, tabName);
+
+    // 设置新标签页为当前选中的标签页
+    tabWidget->setCurrentIndex(index);
+
+    // 初始化状态（如清空文本，设置标题等）
+    filePath = "";
+    textChanged = false;
+
+    // 清除新标签页中的内容
+    newTextEdit->clear();
+
+    // 设置窗口标题
+    setWindowTitle(tr("新建文本文件~编辑器"));
+
+    // 连接信号与槽
+    connect(newTextEdit, &QPlainTextEdit::textChanged, this, &MainWindow::on_textEdit_textChanged);
+    connect(newTextEdit, &QPlainTextEdit::cursorPositionChanged, this, &MainWindow::on_textEdit_cursorPositionChanged);
 }
 
 
@@ -720,4 +724,44 @@ void MainWindow::on_actionExit_triggered() {//退出
 
     // 退出应用程序
     QApplication::quit();
+}
+
+void MainWindow::on_textEdit_cursorPositionChanged() {
+    // 获取当前激活的标签页
+    QWidget *currentWidget = tabWidget->currentWidget();
+    if (!currentWidget) {
+        return;  // 如果没有找到有效的标签页，直接返回
+    }
+
+    // 假设当前标签页是 QPlainTextEdit 类型的文本编辑器
+    QPlainTextEdit *currentTextEdit = qobject_cast<QPlainTextEdit*>(currentWidget);
+    if (!currentTextEdit) {
+        return;  // 如果不是 QPlainTextEdit 类型，直接返回
+    }
+
+    // 获取光标位置信息
+    QTextCursor cursor = currentTextEdit->textCursor();
+    int line = cursor.blockNumber() + 1;  // 获取当前行号（从 1 开始）
+    int column = cursor.columnNumber() + 1;  // 获取当前列号（从 1 开始）
+
+    // 更新状态栏中的光标位置信息
+    statusCursorLabel->setText("Ln: " + QString::number(line) + "   Col: " + QString::number(column));
+}
+
+void MainWindow::onTabChanged(int index) {
+    // 获取当前激活的标签页
+    QWidget *currentWidget = tabWidget->widget(index);
+    if (!currentWidget) {
+        return;  // 如果没有找到有效的标签页，直接返回
+    }
+
+    // 假设当前标签页是 QPlainTextEdit 类型的文本编辑器
+    QPlainTextEdit *currentTextEdit = qobject_cast<QPlainTextEdit*>(currentWidget);
+    if (!currentTextEdit) {
+        return;  // 如果不是 QPlainTextEdit 类型，直接返回
+    }
+
+    // 更新状态栏信息
+    on_textEdit_textChanged();  // 更新总长度和总行数
+    on_textEdit_cursorPositionChanged();  // 更新行号和列号
 }

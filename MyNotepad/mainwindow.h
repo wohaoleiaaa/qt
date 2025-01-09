@@ -6,6 +6,7 @@
 #include <QTabWidget>
 #include <QPlainTextEdit>
 #include "syntaxhighlighter.h"
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -67,11 +68,16 @@ private slots:
 
     void on_actionExit_triggered();
 
+    void onTabChanged(int index);  // 标签页切换时触发
+
+    void on_textEdit_cursorPositionChanged();
+
+
 private:
     Ui::MainWindow *ui;
 
-    QLabel statusCursorLabel;
-    QLabel statusLabel;
+    QLabel *statusLabel;      // 用于显示总长度和总行数
+    QLabel *statusCursorLabel; // 用于显示行号和列号
 
     QString filePath;
 
