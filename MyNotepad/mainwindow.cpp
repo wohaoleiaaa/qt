@@ -67,7 +67,7 @@ void MainWindow::on_actionFind_triggered() {
 
 void MainWindow::on_actionReplace_triggered()//替换界面
 {
-    ReplaceDialog dlg;
+    ReplaceDialog dlg(this, tabWidget);  // 传入 tabWidget
     dlg.exec();
 }
 
