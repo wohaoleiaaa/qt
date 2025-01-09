@@ -12,6 +12,7 @@
 #include <QTabWidget>
 #include "syntaxhighlighter.h"
 #include <QPlainTextEdit>
+#include "codeeditor.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),
@@ -329,8 +330,8 @@ bool MainWindow::userEditConfirmed() {
 
 
 void MainWindow::createNewTab() {
-    // 创建新的 QPlainTextEdit 作为文本编辑器
-    QPlainTextEdit *newTextEdit = new QPlainTextEdit();
+    // 创建新的 CodeEditor 作为文本编辑器
+    CodeEditor *newTextEdit = new CodeEditor();
 
     // 设置语法高亮
     new SyntaxHighlighter(newTextEdit->document());
@@ -361,10 +362,9 @@ void MainWindow::createNewTab() {
     setWindowTitle(tr("新建文本文件~编辑器"));
 
     // 连接信号与槽
-    connect(newTextEdit, &QPlainTextEdit::textChanged, this, &MainWindow::on_textEdit_textChanged);
-    connect(newTextEdit, &QPlainTextEdit::cursorPositionChanged, this, &MainWindow::on_textEdit_cursorPositionChanged);
+    connect(newTextEdit, &CodeEditor::textChanged, this, &MainWindow::on_textEdit_textChanged);
+    connect(newTextEdit, &CodeEditor::cursorPositionChanged, this, &MainWindow::on_textEdit_cursorPositionChanged);
 }
-
 
 
 void MainWindow::on_actionUndo_triggered()//撤回
