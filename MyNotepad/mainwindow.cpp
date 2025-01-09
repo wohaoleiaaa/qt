@@ -77,6 +77,24 @@ MainWindow::MainWindow(QWidget *parent)
 
     // 加载书签
     loadBookmarks();
+
+    // 添加收藏夹菜单项
+    QMenu *favoriteMenu = ui->menubar->addMenu(tr("收藏夹"));
+    QAction *addFavoriteAction = favoriteMenu->addAction(tr("添加收藏"));
+    QAction *removeFavoriteAction = favoriteMenu->addAction(tr("删除收藏"));
+    QAction *openFavoriteAction = favoriteMenu->addAction(tr("打开收藏"));
+
+    // 连接信号与槽
+    connect(addFavoriteAction, &QAction::triggered, this, &MainWindow::on_actionAddFavorite_triggered);
+    connect(removeFavoriteAction, &QAction::triggered, this, &MainWindow::on_actionRemoveFavorite_triggered);
+    connect(openFavoriteAction, &QAction::triggered, this, &MainWindow::on_actionOpenFavorite_triggered);
+
+    // 添加快捷键
+    addFavoriteAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_D));
+    openFavoriteAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_F));
+
+    // 加载收藏夹
+    loadFavorites();
 }
 
 
@@ -1058,5 +1076,114 @@ void MainWindow::loadBookmarks() {
         bookmarks[line] = description;
     }
     settings.endArray();
+}
+
+void MainWindow::on_actionAddFavorite_triggered() {
+    // 获取当前激活的标签页
+    QWidget *currentWidget = tabWidget->currentWidget();
+    if (!currentWidget) {
+        QMessageBox::warning(this, tr("添加收藏"), tr("没有找到有效的文本编辑器！"));
+        return;
+    }
+
+    // 获取当前文本编辑器
+    QPlainTextEdit *currentTextEdit = qobject_cast<QPlainTextEdit*>(currentWidget);
+    if (!currentTextEdit) {
+        QMessageBox::warning(this, tr("添加收藏"), tr("当前标签页不是文本编辑器！"));
+        return;
+    }
+
+    // 获取当前文件的路径
+    QString filePath = this->windowTitle();  // 假设窗口标题是文件路径
+    if (filePath.isEmpty() || filePath == "新建文本文件~编辑器") {
+        QMessageBox::warning(this, tr("添加收藏"), tr("当前文件未保存，请先保存文件！"));
+        return;
+    }
+
+    // 检查是否已经收藏
+    if (favorites.contains(filePath)) {
+        QMessageBox::information(this, tr("添加收藏"), tr("该文件已经存在于收藏夹中！"));
+        return;
+    }
+
+    // 添加到收藏夹
+    favorites.append(filePath);
+    saveFavorites();  // 保存收藏夹
+    QMessageBox::information(this, tr("添加收藏"), tr("文件已添加到收藏夹！"));
+}
+
+void MainWindow::on_actionRemoveFavorite_triggered() {
+    // 检查收藏夹是否为空
+    if (favorites.isEmpty()) {
+        QMessageBox::information(this, tr("删除收藏"), tr("收藏夹为空！"));
+        return;
+    }
+
+    // 创建输入对话框
+    QInputDialog dialog(this);
+    dialog.setWindowFlags(dialog.windowFlags() & ~Qt::WindowContextHelpButtonHint);  // 去掉问号按钮
+    dialog.setWindowTitle(tr("删除收藏"));
+    dialog.setLabelText(tr("请选择一个收藏项："));
+    dialog.setComboBoxItems(favorites);
+    dialog.setComboBoxEditable(false);  // 禁止编辑
+
+    // 显示对话框
+    if (dialog.exec() == QDialog::Accepted) {
+        QString selectedFavorite = dialog.textValue();
+        if (!selectedFavorite.isEmpty()) {
+            // 从收藏夹中删除
+            favorites.removeOne(selectedFavorite);
+            saveFavorites();  // 保存收藏夹
+            QMessageBox::information(this, tr("删除收藏"), tr("收藏项已删除！"));
+        }
+    }
+}
+void MainWindow::on_actionOpenFavorite_triggered() {
+    // 检查收藏夹是否为空
+    if (favorites.isEmpty()) {
+        QMessageBox::information(this, tr("打开收藏"), tr("收藏夹为空！"));
+        return;
+    }
+
+    // 创建输入对话框
+    QInputDialog dialog(this);
+    dialog.setWindowFlags(dialog.windowFlags() & ~Qt::WindowContextHelpButtonHint);  // 去掉问号按钮
+    dialog.setWindowTitle(tr("打开收藏"));
+    dialog.setLabelText(tr("请选择一个收藏项："));
+    dialog.setComboBoxItems(favorites);
+    dialog.setComboBoxEditable(false);  // 禁止编辑
+
+    // 显示对话框
+    if (dialog.exec() == QDialog::Accepted) {
+        QString selectedFavorite = dialog.textValue();
+        if (!selectedFavorite.isEmpty()) {
+            // 打开选中的文件
+            QFile file(selectedFavorite);
+            if (!file.open(QFile::ReadOnly | QFile::Text)) {
+                QMessageBox::warning(this, tr("打开收藏"), tr("无法打开文件：%1").arg(selectedFavorite));
+                return;
+            }
+
+            QTextStream in(&file);
+            QString text = in.readAll();
+            file.close();
+
+            // 在当前标签页中显示文件内容
+            QPlainTextEdit *currentTextEdit = qobject_cast<QPlainTextEdit*>(tabWidget->currentWidget());
+            if (currentTextEdit) {
+                currentTextEdit->setPlainText(text);
+                setWindowTitle(QFileInfo(selectedFavorite).fileName());
+            }
+        }
+    }
+}
+void MainWindow::saveFavorites() {
+    QSettings settings("MyCompany", "MyEditor");
+    settings.setValue("favorites", favorites);
+}
+
+void MainWindow::loadFavorites() {
+    QSettings settings("MyCompany", "MyEditor");
+    favorites = settings.value("favorites").toStringList();
 }
 

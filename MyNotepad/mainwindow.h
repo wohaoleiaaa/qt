@@ -90,6 +90,11 @@ private slots:
 
     void on_actionGotoBookmark_triggered();
 
+    void on_actionAddFavorite_triggered();
+
+    void on_actionRemoveFavorite_triggered();
+
+    void on_actionOpenFavorite_triggered();
 
 private:
     Ui::MainWindow *ui;
@@ -125,6 +130,10 @@ private:
     QMap<int, QString> bookmarks;  // 存储书签，键为行号，值为书签描述
     void saveBookmarks();  // 保存书签到 QSettings
     void loadBookmarks();  // 从 QSettings 加载书签
+
+    QStringList favorites;  // 存储收藏的文件路径
+    void saveFavorites();  // 保存收藏夹到 QSettings
+    void loadFavorites();  // 从 QSettings 加载收藏夹
 
 };
 #endif // MAINWINDOW_H
