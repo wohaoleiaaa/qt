@@ -1,4 +1,3 @@
-// syntaxhighlighter.cpp
 #include "syntaxhighlighter.h"
 
 SyntaxHighlighter::SyntaxHighlighter(QTextDocument *parent)

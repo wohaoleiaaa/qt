@@ -1,4 +1,3 @@
-// syntaxhighlighter.h
 #ifndef SYNTAXHIGHLIGHTER_H
 #define SYNTAXHIGHLIGHTER_H
 
