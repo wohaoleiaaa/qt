@@ -1,3 +1,4 @@
+// codeeditor.h
 #ifndef CODEEDITOR_H
 #define CODEEDITOR_H
 
@@ -15,6 +16,7 @@ public:
 
     void lineNumberAreaPaintEvent(QPaintEvent *event);
     int lineNumberAreaWidth();
+    void setLineNumberAreaVisible(bool visible); // 新增方法
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
@@ -26,6 +28,7 @@ private slots:
 
 private:
     QWidget *lineNumberArea;
+    bool isLineNumberAreaVisible; // 新增成员变量
 };
 
 class LineNumberArea : public QWidget

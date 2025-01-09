@@ -361,6 +361,9 @@ void MainWindow::createNewTab() {
     // 设置窗口标题
     setWindowTitle(tr("新建文本文件~编辑器"));
 
+    // 设置初始状态为显示行号
+    on_actionShowline_triggered(false); // 调用槽函数，不显示行号
+
     // 连接信号与槽
     connect(newTextEdit, &CodeEditor::textChanged, this, &MainWindow::on_textEdit_textChanged);
     connect(newTextEdit, &CodeEditor::cursorPositionChanged, this, &MainWindow::on_textEdit_cursorPositionChanged);
@@ -765,3 +768,15 @@ void MainWindow::onTabChanged(int index) {
     on_textEdit_textChanged();  // 更新总长度和总行数
     on_textEdit_cursorPositionChanged();  // 更新行号和列号
 }
+
+void MainWindow::on_actionShowline_triggered(bool checked)//显示行号
+{
+    // 遍历所有标签页
+    for (int i = 0; i < tabWidget->count(); ++i) {
+        CodeEditor *codeEditor = qobject_cast<CodeEditor*>(tabWidget->widget(i));
+        if (codeEditor) {
+            codeEditor->setLineNumberAreaVisible(checked); // 设置行号区域的显示状态
+        }
+    }
+}
+

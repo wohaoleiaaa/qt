@@ -1,8 +1,9 @@
+// codeeditor.cpp
 #include "codeeditor.h"
 #include <QPainter>
 #include <QTextBlock>
 
-CodeEditor::CodeEditor(QWidget *parent) : QPlainTextEdit(parent)
+CodeEditor::CodeEditor(QWidget *parent) : QPlainTextEdit(parent), isLineNumberAreaVisible(true) // 默认显示行号
 {
     lineNumberArea = new LineNumberArea(this);
 
@@ -14,8 +15,19 @@ CodeEditor::CodeEditor(QWidget *parent) : QPlainTextEdit(parent)
     highlightCurrentLine();
 }
 
+void CodeEditor::setLineNumberAreaVisible(bool visible)
+{
+    isLineNumberAreaVisible = visible;
+    lineNumberArea->setVisible(visible);
+    updateLineNumberAreaWidth(0); // 更新边距
+}
+
 int CodeEditor::lineNumberAreaWidth()
 {
+    if (!isLineNumberAreaVisible) {
+        return 0; // 如果行号区域隐藏，边距为 0
+    }
+
     int digits = 1;
     int max = qMax(1, blockCount());
     while (max >= 10) {
