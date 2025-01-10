@@ -75,7 +75,7 @@ public:
 
     void retranslateUi(QDialog *HistoryDialog)
     {
-        HistoryDialog->setWindowTitle(QApplication::translate("HistoryDialog", "Dialog", nullptr));
+        HistoryDialog->setWindowTitle(QApplication::translate("HistoryDialog", "\345\216\206\345\217\262\350\256\260\345\275\225", nullptr));
         deleteButton->setText(QApplication::translate("HistoryDialog", "\345\210\240\351\231\244\351\200\211\344\270\255", nullptr));
         closeButton->setText(QApplication::translate("HistoryDialog", "\345\205\263\351\227\255", nullptr));
     } // retranslateUi

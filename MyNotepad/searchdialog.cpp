@@ -7,7 +7,7 @@
 SearchDialog::SearchDialog(QWidget *parent, QTabWidget *tabWidget)
     : QDialog(parent),
       ui(new Ui::SearchDialog),
-      pTabWidget(tabWidget)  // 初始化 QTabWidget
+      pTabWidget(tabWidget)
 {
     ui->setupUi(this);
 
@@ -37,7 +37,7 @@ QPlainTextEdit* SearchDialog::getCurrentTextEdit() {
     return qobject_cast<QPlainTextEdit*>(currentWidget);
 }
 
-void SearchDialog::on_btFindNext_clicked()
+void SearchDialog::on_btFindNext_clicked()//查找下一个
 {
     QPlainTextEdit *currentTextEdit = getCurrentTextEdit();
     if (!currentTextEdit) {
@@ -87,7 +87,7 @@ void SearchDialog::on_btFindNext_clicked()
     }
 }
 
-void SearchDialog::on_btCancel_clicked()
+void SearchDialog::on_btCancel_clicked()//关闭
 {
     this->close();  // 关闭查找对话框
 }

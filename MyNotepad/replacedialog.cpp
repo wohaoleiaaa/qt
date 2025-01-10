@@ -7,7 +7,7 @@
 ReplaceDialog::ReplaceDialog(QWidget *parent, QTabWidget *tabWidget)
     : QDialog(parent),
       ui(new Ui::ReplaceDialog),
-      pTabWidget(tabWidget)  // 初始化 QTabWidget
+      pTabWidget(tabWidget)
 {
     ui->setupUi(this);
 
@@ -37,7 +37,7 @@ QPlainTextEdit* ReplaceDialog::getCurrentTextEdit() {
     return qobject_cast<QPlainTextEdit*>(currentWidget);
 }
 
-void ReplaceDialog::on_btFindNext_clicked()
+void ReplaceDialog::on_btFindNext_clicked()//查找下一个
 {
     QPlainTextEdit *currentTextEdit = getCurrentTextEdit();
     if (!currentTextEdit) {
@@ -87,7 +87,7 @@ void ReplaceDialog::on_btFindNext_clicked()
     }
 }
 
-void ReplaceDialog::on_btReplace_clicked()
+void ReplaceDialog::on_btReplace_clicked()//替换
 {
     QPlainTextEdit *currentTextEdit = getCurrentTextEdit();
     if (!currentTextEdit) {
@@ -115,7 +115,7 @@ void ReplaceDialog::on_btReplace_clicked()
     on_btFindNext_clicked();
 }
 
-void ReplaceDialog::on_btReplaceAll_clicked()
+void ReplaceDialog::on_btReplaceAll_clicked()//全部替换
 {
     QPlainTextEdit *currentTextEdit = getCurrentTextEdit();
     if (!currentTextEdit) {

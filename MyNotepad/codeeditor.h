@@ -15,7 +15,7 @@ public:
 
     void lineNumberAreaPaintEvent(QPaintEvent *event);
     int lineNumberAreaWidth();
-    void setLineNumberAreaVisible(bool visible); // 新增方法
+    void setLineNumberAreaVisible(bool visible);
 
 protected:
     void resizeEvent(QResizeEvent *event) override;

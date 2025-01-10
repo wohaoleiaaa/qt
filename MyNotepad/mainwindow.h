@@ -1,10 +1,9 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
-
 #include <QMainWindow>
 #include<QLabel>
-#include <QTabWidget>  // 引入 QTabWidget
-#include <QPlainTextEdit>  // 引入 QPlainTextEdit 以便使用文本编辑器
+#include <QTabWidget>
+#include <QPlainTextEdit>
 #include "syntaxhighlighter.h"
 #include <QRegularExpression>
 #include <QDesktopServices>

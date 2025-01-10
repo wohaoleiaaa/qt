@@ -1,11 +1,13 @@
 #include "historydialog.h"
-#include "ui_historydialog.h"  // 包含 UI 文件生成的类
+#include "ui_historydialog.h"
 #include <QSettings>
-// 构造函数
 HistoryDialog::HistoryDialog(QWidget *parent)
     : QDialog(parent), ui(new Ui::HistoryDialog)
 {
-    ui->setupUi(this);  // 加载 UI 文件
+    ui->setupUi(this);
+
+    // 去掉帮助按钮×旁边的？
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     // 连接信号与槽
     connect(ui->deleteButton, &QPushButton::clicked, this, &HistoryDialog::onDeleteSelected);
@@ -13,20 +15,18 @@ HistoryDialog::HistoryDialog(QWidget *parent)
     connect(ui->historyList, &QListWidget::itemDoubleClicked, this, &HistoryDialog::onItemDoubleClicked);
 }
 
-// 析构函数
 HistoryDialog::~HistoryDialog()
 {
     delete ui;
 }
 
 
-void HistoryDialog::setHistory(const QStringList &history)//++++
+void HistoryDialog::setHistory(const QStringList &history)
 {
     historyList = history;  // 初始化 historyList
     ui->historyList->clear();
     ui->historyList->addItems(historyList);
 }
-
 
 // 获取历史记录
 QStringList HistoryDialog::getHistory() const
@@ -38,8 +38,7 @@ QStringList HistoryDialog::getHistory() const
     return history;
 }
 
-
-void HistoryDialog::onDeleteSelected()//++++
+void HistoryDialog::onDeleteSelected()
 {
     // 获取选中的历史记录项
     QList<QListWidgetItem*> selectedItems = ui->historyList->selectedItems();

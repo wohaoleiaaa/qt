@@ -21,11 +21,11 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),
       ui(new Ui::MainWindow),
-      tabWidget(new QTabWidget(this)) // 创建 QTabWidget
+      tabWidget(new QTabWidget(this))
 
 {
     ui->setupUi(this);
-    setCentralWidget(tabWidget); // 设置 QTabWidget 为中央控件
+    setCentralWidget(tabWidget);
 
     // 初始化状态栏
     statusLabel = new QLabel(this);  // 用于显示总长度和总行数
@@ -112,7 +112,7 @@ void MainWindow::on_actionAbout_triggered()//关于界面
 }
 
 
-void MainWindow::on_actionFind_triggered() {
+void MainWindow::on_actionFind_triggered() {//查找界面
     SearchDialog dlg(this, tabWidget);  // 传入 tabWidget
     dlg.exec();
 }
@@ -303,7 +303,7 @@ void MainWindow::on_actionSaveAs_triggered() {//另存为
     textChanged = false;  // 修改标志设为 false，表示没有更改了
 }
 
-void MainWindow::on_textEdit_textChanged() {
+void MainWindow::on_textEdit_textChanged() {//检查文本是否修改
     // 获取当前激活的标签页
     QWidget *currentWidget = tabWidget->currentWidget();
     if (!currentWidget) {
@@ -381,7 +381,7 @@ bool MainWindow::userEditConfirmed() {
 }
 
 
-void MainWindow::createNewTab() {
+void MainWindow::createNewTab() {//新建文本标签
     // 创建新的 CodeEditor 作为文本编辑器
     CodeEditor *newTextEdit = new CodeEditor();
 
@@ -424,7 +424,6 @@ void MainWindow::createNewTab() {
 
 void MainWindow::on_actionUndo_triggered()//撤回
 {
-    // 获取当前激活的标签页
     QWidget *currentWidget = tabWidget->currentWidget();
     if (!currentWidget) {
         QMessageBox::warning(this, tr("撤销"), tr("没有找到有效的文本编辑器！"));
@@ -445,7 +444,6 @@ void MainWindow::on_actionUndo_triggered()//撤回
 
 void MainWindow::on_actionRedo_triggered()//恢复
 {
-    // 获取当前激活的标签页
     QWidget *currentWidget = tabWidget->currentWidget();
     if (!currentWidget) {
         QMessageBox::warning(this, tr("重做"), tr("没有找到有效的文本编辑器！"));
@@ -466,7 +464,6 @@ void MainWindow::on_actionRedo_triggered()//恢复
 
 void MainWindow::on_actionCut_triggered()//剪切
 {
-    // 获取当前激活的标签页
     QWidget *currentWidget = tabWidget->currentWidget();
     if (!currentWidget) {
         QMessageBox::warning(this, tr("剪切"), tr("没有找到有效的文本编辑器！"));
@@ -487,7 +484,6 @@ void MainWindow::on_actionCut_triggered()//剪切
 
 void MainWindow::on_actionCopy_triggered()//复制
 {
-    // 获取当前激活的标签页
     QWidget *currentWidget = tabWidget->currentWidget();
     if (!currentWidget) {
         QMessageBox::warning(this, tr("复制"), tr("没有找到有效的文本编辑器！"));
@@ -508,7 +504,6 @@ void MainWindow::on_actionCopy_triggered()//复制
 
 void MainWindow::on_actionPaste_triggered()//粘贴
 {
-    // 获取当前激活的标签页
     QWidget *currentWidget = tabWidget->currentWidget();
     if (!currentWidget) {
         QMessageBox::warning(this, tr("粘贴"), tr("没有找到有效的文本编辑器！"));
@@ -595,7 +590,6 @@ void MainWindow::setDarkTheme() {//深色主题样式表
 }
 
 void MainWindow::on_actionFontColor_triggered() {//字体颜色
-    // 获取当前激活的标签页
     QWidget *currentWidget = tabWidget->currentWidget();
     if (!currentWidget) {
         QMessageBox::warning(this, tr("字体颜色"), tr("没有找到有效的文本编辑器！"));
@@ -624,7 +618,6 @@ void MainWindow::on_actionFontColor_triggered() {//字体颜色
 }
 
 void MainWindow::on_actionToolBgdColor_triggered() {//编辑器背景色
-    // 获取当前激活的标签页
     QWidget *currentWidget = tabWidget->currentWidget();
     if (!currentWidget) {
         QMessageBox::warning(this, tr("编辑器背景色"), tr("没有找到有效的文本编辑器！"));
@@ -649,7 +642,6 @@ void MainWindow::on_actionToolBgdColor_triggered() {//编辑器背景色
 
 
 void MainWindow::on_actionFontBgdColor_triggered() {//字体背景色
-    // 获取当前激活的标签页
     QWidget *currentWidget = tabWidget->currentWidget();
     if (!currentWidget) {
         QMessageBox::warning(this, tr("文本背景色"), tr("没有找到有效的文本编辑器！"));
@@ -707,7 +699,6 @@ void MainWindow::on_actionWrap_triggered() {//自动换行
 
 
 void MainWindow::on_actionFont_triggered() {//字体
-    // 获取当前激活的标签页
     QWidget *currentWidget = tabWidget->currentWidget();
     if (!currentWidget) {
         QMessageBox::warning(this, tr("字体设置"), tr("没有找到有效的文本编辑器！"));
@@ -752,7 +743,6 @@ void MainWindow::on_actionStatusbar_triggered()//状态栏
 
 
 void MainWindow::on_actionSelectAll_triggered() {//全选
-    // 获取当前激活的标签页
     QWidget *currentWidget = tabWidget->currentWidget();
     if (!currentWidget) {
         QMessageBox::warning(this, tr("全选"), tr("没有找到有效的文本编辑器！"));
@@ -772,7 +762,6 @@ void MainWindow::on_actionSelectAll_triggered() {//全选
 
 
 void MainWindow::on_actionExit_triggered() {//退出
-    // 检查是否有未保存的更改
     if (!userEditConfirmed()) {
         return;  // 如果用户取消退出操作，直接返回
     }
@@ -782,7 +771,6 @@ void MainWindow::on_actionExit_triggered() {//退出
 }
 
 void MainWindow::on_textEdit_cursorPositionChanged() {
-    // 获取当前激活的标签页
     QWidget *currentWidget = tabWidget->currentWidget();
     if (!currentWidget) {
         return;  // 如果没有找到有效的标签页，直接返回
@@ -804,7 +792,6 @@ void MainWindow::on_textEdit_cursorPositionChanged() {
 }
 
 void MainWindow::onTabChanged(int index) {
-    // 获取当前激活的标签页
     QWidget *currentWidget = tabWidget->widget(index);
     if (!currentWidget) {
         return;  // 如果没有找到有效的标签页，直接返回
@@ -823,7 +810,6 @@ void MainWindow::onTabChanged(int index) {
 
 void MainWindow::on_actionShowline_triggered(bool checked)//显示行号
 {
-    // 遍历所有标签页
     for (int i = 0; i < tabWidget->count(); ++i) {
         CodeEditor *codeEditor = qobject_cast<CodeEditor*>(tabWidget->widget(i));
         if (codeEditor) {
@@ -946,7 +932,6 @@ void MainWindow::onHistoryItemSelected(const QString &filePath)
 }
 
 void MainWindow::on_actionAddBookmark_triggered() {
-    // 获取当前激活的标签页
     QWidget *currentWidget = tabWidget->currentWidget();
     if (!currentWidget) {
         QMessageBox::warning(this, tr("添加书签"), tr("没有找到有效的文本编辑器！"));
@@ -984,7 +969,6 @@ void MainWindow::on_actionAddBookmark_triggered() {
 }
 
 void MainWindow::on_actionRemoveBookmark_triggered() {
-    // 获取当前激活的标签页
     QWidget *currentWidget = tabWidget->currentWidget();
     if (!currentWidget) {
         QMessageBox::warning(this, tr("删除书签"), tr("没有找到有效的文本编辑器！"));
@@ -1079,7 +1063,6 @@ void MainWindow::loadBookmarks() {
 }
 
 void MainWindow::on_actionAddFavorite_triggered() {
-    // 获取当前激活的标签页
     QWidget *currentWidget = tabWidget->currentWidget();
     if (!currentWidget) {
         QMessageBox::warning(this, tr("添加收藏"), tr("没有找到有效的文本编辑器！"));
